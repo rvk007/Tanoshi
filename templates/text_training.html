@@ -1,0 +1,109 @@
+{%extends 'index.html' %}{% block content%}
+
+<script>
+  function showDiv() {
+    document.getElementById("loading").style.display = "block";
+  }
+
+  function colorchange_onClick() {
+    document.getElementById("choice").onclick = function () {
+      document.getElementById("choice").style.color = "green";
+    };
+  }
+</script>
+
+<style>
+  button .focus {
+    background-color: red;
+  }
+</style>
+
+<h1 style="padding-top: 20px">Customize the training!</h1>
+
+<form>
+  <div class="form-group">
+    <div
+      class="input-group"
+      style="padding-left: 250px; padding-top: 50px; padding-right: 250px"
+    >
+      <div class="input-group-prepend">
+        <span class="input-group-text">Username</span>
+      </div>
+      <input type="text" aria-label="name" class="form-control" />
+    </div>
+  </div>
+  <div
+    class="row"
+    style="padding-left: 50px; padding-top: 80px; padding-right: 50px"
+  >
+    <div class="form-group col-sm-6" style="padding-left: 100px">
+      <label
+        class="form-check-label"
+        style="text-align: center"
+        for="exampleCheck1"
+        >Select a model</label
+      ><br />
+      <button
+        id="choice"
+        onclick="colorchange_onClick()"
+        class="btn btn-outline-primary mt-1"
+      >
+        MobileNetV2
+      </button>
+      <button
+        id="choice"
+        onclick="colorchange_onClick()"
+        class="btn btn-outline-primary mt-1"
+      >
+        ShuffleNet
+      </button>
+    </div>
+
+    <div class="form-group col-sm-6" style="padding-left: 200px">
+      <label class="form-check-label" for="exampleCheck1"
+        >Select a training:validation ratio</label
+      ><br />
+      <button
+        id="choice"
+        onclick="colorchange_onClick()"
+        class="btn btn-outline-primary mt-1"
+      >
+        8:2
+      </button>
+      <button
+        id="choice"
+        onclick="colorchange_onClick()"
+        class="btn btn-outline-primary mt-1"
+      >
+        7:3
+      </button>
+    </div>
+  </div>
+  <div
+    class="form-group form-check"
+    style="padding-left: 450px; padding-top: 70px; padding-right: 250px"
+  >
+    <label class="form-check-label" for="exampleCheck1">Choose dataset</label
+    ><br />
+    <input type="file" id="dataset" name="dataset" accept="" />
+    <p style="font-size: small">
+      The dataset should not be more than 200 MB. Recommended: If you have only
+      two classes in your dataset, upload atleast 10 image of each category and
+      select 8:2 ratio for training. If you have 10 classes in your dataset,
+      upload 100 images of each and choose 7:3 ratio for better results.
+    </p>
+  </div>
+
+  <div style="padding-left: 450px; padding-top: 130px; padding-right: 250px">
+    <button type="submit" class="btn btn-outline-primary" onclick="showDiv()">
+      Begin training</button
+    ><br /><br />
+    <div id="loading" style="display: none; padding-left: 10px">
+      <div class="spinner-grow text-info"></div>
+      <div class="spinner-grow text-primary"></div>
+      <div class="spinner-grow text-info"></div>
+    </div>
+  </div>
+</form>
+
+{% endblock %}
