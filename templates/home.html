@@ -1,14 +1,14 @@
 {% extends 'index.html' %} {% block content %}
-<div
-  class="row"
-  style="padding-left: 50px; padding-top: 80px; padding-right: 50px"
->
+<div class="text-center my-5 mx-auto">
+  <h1>Hi There!</h1>
+</div>
+<div class="row text-center mt-5">
   <div class="col-sm-6">
-    <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 24rem">
+    <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 34rem">
       <img
-        src="{{url_for('static', filename='2.jpeg')}}"
+        src="{{url_for('static', filename='image_classification.gif')}}"
         class="card-img-top"
-        height="350px"
+        height="250vh"
       />
       <div class="card-body" style="text-align: center">
         <h5 class="card-title">Object Recognition</h5>
@@ -23,11 +23,11 @@
     </div>
   </div>
   <div class="col-sm-6">
-    <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 24rem">
+    <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 34rem">
       <img
-        src="{{url_for('static', filename='2.jpeg')}}"
+        src="{{url_for('static', filename='sentiment-analysis.gif')}}"
         class="card-img-top"
-        height="350px"
+        height="250vh"
       />
       <div class="card-body" style="text-align: center">
         <h5 class="card-title">Sentiment Analysis</h5>

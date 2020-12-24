@@ -2,11 +2,8 @@
 <h1 style="padding-top: 20px">Inference</h1>
 
 <form action="#" method="POST" enctype="multipart/form-data">
-  <div class="form-group">
-    <div
-      class="input-group"
-      style="padding-left: 250px; padding-top: 50px; padding-right: 250px"
-    >
+  <div class="form-group col-6 mx-auto">
+    <div class="input-group text-center">
       <div class="input-group-prepend">
         <span
           for="validationDefaultUsername"
@@ -26,16 +23,13 @@
       />
     </div>
   </div>
-  <div
-    class="row"
-    style="padding-left: 50px; padding-top: 80px; padding-right: 50px"
-  >
+  <div class="row text-center mt-5">
     <div class="col-sm-6">
-      <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 24rem">
+      <div class="card shadow p-5 mb-5 bg-white rounded" style="width: 25vw">
         <img
-          src="{{url_for('static', filename='2.jpeg')}}"
+          src="{{url_for('static', filename='image_classification.gif')}}"
           class="card-img-top"
-          height="350px"
+          height="250vh"
         />
         <div class="card-body" style="text-align: center">
           <h5 class="card-title">Object Recognition</h5>
@@ -60,11 +54,11 @@
       </div>
     </div>
     <div class="col-sm-6">
-      <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 24rem">
+      <div class="card shadow p-5 mb-5 bg-white rounded" style="width: 25vw">
         <img
-          src="{{url_for('static', filename='2.jpeg')}}"
+          src="{{url_for('static', filename='sentiment-analysis.gif')}}"
           class="card-img-top"
-          height="350px"
+          height="250vh"
         />
         <div class="card-body" style="text-align: center">
           <h5 class="card-title">Sentiment Analysis</h5>
