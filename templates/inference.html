@@ -1,0 +1,96 @@
+{%extends 'index.html' %}{% block content%}
+<h1 style="padding-top: 20px">Inference</h1>
+
+<form action="#" method="POST" enctype="multipart/form-data">
+  <div class="form-group">
+    <div
+      class="input-group"
+      style="padding-left: 250px; padding-top: 50px; padding-right: 250px"
+    >
+      <div class="input-group-prepend">
+        <span
+          for="validationDefaultUsername"
+          class="input-group-text"
+          id="inputUser"
+          >Username</span
+        >
+      </div>
+      <input
+        type="text"
+        aria-label="name"
+        name="username"
+        class="form-control"
+        id="validationDefaultUsername"
+        aria-describedby="inputUser"
+        required
+      />
+    </div>
+  </div>
+  <div
+    class="row"
+    style="padding-left: 50px; padding-top: 80px; padding-right: 50px"
+  >
+    <div class="col-sm-6">
+      <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 24rem">
+        <img
+          src="{{url_for('static', filename='2.jpeg')}}"
+          class="card-img-top"
+          height="350px"
+        />
+        <div class="card-body" style="text-align: center">
+          <h5 class="card-title">Object Recognition</h5>
+          <p class="card-text">
+            Finds an object in the input image and classify it to one of the
+            classes from the list of possible labels provided in a dataset!
+          </p>
+          {% if popup %}
+          <a
+            href="image_inference.html"
+            class="btn btn-outline-primary mt-1"
+            data-toggle="modal"
+            data-target="#exampleModal"
+            >Let's Start</a
+          >
+          {% else%}
+          <a href="image_inference.html" class="btn btn-outline-primary mt-1"
+            >Let's Start</a
+          >
+          {% endif%}
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 24rem">
+        <img
+          src="{{url_for('static', filename='2.jpeg')}}"
+          class="card-img-top"
+          height="350px"
+        />
+        <div class="card-body" style="text-align: center">
+          <h5 class="card-title">Sentiment Analysis</h5>
+
+          <p class="card-text">
+            Detects the emotion or sentiment of a text and classify them to
+            positive <i class="fas fa-smile"></i>, negative
+            <i class="fas fa-frown"></i> or neutral <i class="fas fa-meh"></i>!
+          </p>
+          {% if popup %}
+          <a
+            href="text_inference.html"
+            class="btn btn-outline-primary mt-1"
+            data-toggle="modal"
+            data-target="#exampleModal"
+            >Let's Start</a
+          >
+          {% else%}
+          <a href="text_inference.html" class="btn btn-outline-primary mt-1"
+            >Let's Start</a
+          >
+          {% endif%}
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+{% if popup %} {% include 'no_model_popup.html' %} {% endif %} {% endblock %}

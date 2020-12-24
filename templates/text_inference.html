@@ -1,0 +1,44 @@
+{% extends "index.html" %}{% block content%}
+
+<h1 style="padding-top: 20px">Inference</h1>
+
+<div>
+  <form action="#" method="POST" enctype="multipart/form-data">
+    <div
+      class="row"
+      style="padding-left: 50px; padding-top: 80px; padding-right: 50px"
+    >
+      <div class="col-sm-6">
+        <textarea
+          class="form-control shadow p-3 mb-5 bg-white rounded"
+          name="inputSentence"
+          type="text"
+          id="information"
+          rows="6"
+          placeholder="Enter content here"
+        >
+{{ input_Sentence }}</textarea
+        >
+      </div>
+      {% if prediction %}
+      <div class="col-sm-6">
+        <label
+          class="form-control shadow p-6 mb-5 bg-white rounded"
+          id="output"
+          rows="2"
+          placeholder=""
+          style="text-align: center; outline-color: blue; width: 25rem"
+          >{{ prediction }}</label
+        >
+      </div>
+      {% endif %}
+    </div>
+    <br /><br />
+    <div style="padding-left: 230px">
+      <button type="submit" href="#" class="btn btn-outline-primary">
+        Classify Sentence
+      </button>
+    </div>
+  </form>
+</div>
+{% if popup %} {% include 'popup.html' %} {% endif %} {% endblock %}

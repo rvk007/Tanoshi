@@ -1,109 +1,144 @@
 {%extends 'index.html' %}{% block content%}
-
 <script>
   function showDiv() {
     document.getElementById("loading").style.display = "block";
   }
-
-  function colorchange_onClick() {
-    document.getElementById("choice").onclick = function () {
-      document.getElementById("choice").style.color = "green";
-    };
-  }
 </script>
 
-<style>
-  button .focus {
-    background-color: red;
-  }
-</style>
-
 <h1 style="padding-top: 20px">Customize the training!</h1>
+<hr />
 
-<form>
-  <div class="form-group">
-    <div
-      class="input-group"
-      style="padding-left: 250px; padding-top: 50px; padding-right: 250px"
-    >
-      <div class="input-group-prepend">
-        <span class="input-group-text">Username</span>
+<form class="mt-5">
+  <div class="form-row">
+    <div class="form-group col-6 mx-auto">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Username</span>
+        </div>
+        <input type="text" class="form-control" required />
       </div>
-      <input type="text" aria-label="name" class="form-control" />
     </div>
   </div>
-  <div
-    class="row"
-    style="padding-left: 50px; padding-top: 80px; padding-right: 50px"
-  >
-    <div class="form-group col-sm-6" style="padding-left: 100px">
-      <label
-        class="form-check-label"
-        style="text-align: center"
-        for="exampleCheck1"
-        >Select a model</label
-      ><br />
-      <button
-        id="choice"
-        onclick="colorchange_onClick()"
-        class="btn btn-outline-primary mt-1"
-      >
-        MobileNetV2
-      </button>
-      <button
-        id="choice"
-        onclick="colorchange_onClick()"
-        class="btn btn-outline-primary mt-1"
-      >
-        ShuffleNet
-      </button>
+  <div class="form-row mt-4">
+    <div class="form-group col-6 mr-auto text-center">
+      <div class="my-3">Select a model</div>
+      <div class="custom-control custom-radio custom-control-inline">
+        <input
+          type="radio"
+          id="customRadioInline1"
+          name="customRadioInline1"
+          class="custom-control-input"
+        />
+        <label class="custom-control-label" for="customRadioInline1"
+          ><h5>
+            <span class="badge badge-pill badge-info">MobileNet V2</span>
+          </h5></label
+        >
+      </div>
+      <div class="custom-control custom-radio custom-control-inline">
+        <input
+          type="radio"
+          id="customRadioInline2"
+          name="customRadioInline1"
+          class="custom-control-input"
+        />
+        <label class="custom-control-label" for="customRadioInline2"
+          ><h5>
+            <span class="badge badge-pill badge-info">Resnet 34
+      </div>
     </div>
-
-    <div class="form-group col-sm-6" style="padding-left: 200px">
-      <label class="form-check-label" for="exampleCheck1"
-        >Select a training:validation ratio</label
-      ><br />
-      <button
-        id="choice"
-        onclick="colorchange_onClick()"
-        class="btn btn-outline-primary mt-1"
-      >
-        8:2
-      </button>
-      <button
-        id="choice"
-        onclick="colorchange_onClick()"
-        class="btn btn-outline-primary mt-1"
-      >
-        7:3
-      </button>
+    <div class="form-group col-6 ml-auto text-center">
+      <div class="my-3">Select training-validation set ratio</div>
+      <div class="custom-control custom-radio custom-control-inline">
+        <input
+          type="radio"
+          id="customRadioInline3"
+          name="customRadioInline1"
+          class="custom-control-input"
+        />
+        <label class="custom-control-label" for="customRadioInline3"
+          ><h5>
+            <span class="badge badge-pill badge-info">80: 20</span>
+          </h5></label
+        >
+      </div>
+      <div class="custom-control custom-radio custom-control-inline">
+        <input
+          type="radio"
+          id="customRadioInline4"
+          name="customRadioInline1"
+          class="custom-control-input"
+        />
+        <label class="custom-control-label" for="customRadioInline4"
+          ><h5>
+            <span class="badge badge-pill badge-info">70 : 30</span>
+          </h5></label
+        >
+      </div>
     </div>
   </div>
-  <div
-    class="form-group form-check"
-    style="padding-left: 450px; padding-top: 70px; padding-right: 250px"
-  >
-    <label class="form-check-label" for="exampleCheck1">Choose dataset</label
-    ><br />
-    <input type="file" id="dataset" name="dataset" accept="" />
-    <p style="font-size: small">
-      The dataset should not be more than 200 MB. Recommended: If you have only
-      two classes in your dataset, upload atleast 10 image of each category and
-      select 8:2 ratio for training. If you have 10 classes in your dataset,
-      upload 100 images of each and choose 7:3 ratio for better results.
-    </p>
+  <div class="form-row mt-4">
+    <div class="col-1"></div>
+    <div class="form-group col-4 mr-auto text-center">
+      <div class="my-3">Batch Size</div>
+      <div>
+        <input
+          class="form-control shadow p-3 mb-5 bg-white rounded"
+          name="batch_size"
+          type="text"
+          style="text-align: center"
+          required
+        />
+      </div>
+    </div>
+    <div class="col"></div>
+    <div class="form-group col-4 mr-auto text-center">
+      <div class="my-3">Epoch</div>
+      <div>
+        <input
+          class="form-control shadow p-3 mb-5 bg-white rounded"
+          name="epoch"
+          type="text"
+          style="text-align: center"
+          required
+        />
+      </div>
+    </div>
+    <div class="col-1"></div>
   </div>
-
-  <div style="padding-left: 450px; padding-top: 130px; padding-right: 250px">
-    <button type="submit" class="btn btn-outline-primary" onclick="showDiv()">
-      Begin training</button
-    ><br /><br />
-    <div id="loading" style="display: none; padding-left: 10px">
-      <div class="spinner-grow text-info"></div>
-      <div class="spinner-grow text-primary"></div>
-      <div class="spinner-grow text-info"></div>
+  <div class="form-row">
+    <div class="form-group col-12 text-center">
+      <div class="input-group">
+        <div>
+          <h5><span class="badge badge-info">Upload dataset</span></h5>
+          <input type="file" id="dataset" name="dataset" accept="" required />
+          <p style="font-size: small">
+            The dataset should not be more than 200 MB. Recommended: If you have
+            only two classes in your dataset, upload atleast 10 image of each
+            category and select 80:20 ratio for training. If you have 10 classes
+            in your dataset, upload 100 images of each and choose 70:30 ratio
+            for better results.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-12 mt-5 text-center">
+      <button type="submit" class="btn btn-outline-primary" onclick="showDiv()">
+        Begin training</button
+      ><br /><br />
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-12 text-center">
+      <div id="loading" style="display: none; padding-left: 10px">
+        <div class="spinner-grow text-info"></div>
+        <div class="spinner-grow text-primary"></div>
+        <div class="spinner-grow text-info"></div>
+      </div>
     </div>
   </div>
 </form>
 
-{% endblock %}
+{% if popup %} {% include 'popup.html' %} {% endif %} {% endblock %}

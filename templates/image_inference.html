@@ -1,0 +1,42 @@
+{% extends "index.html" %}{% block content%}
+
+<h1 style="padding-top: 20px">Inference</h1>
+
+<div>
+  <form action="#" method="POST" enctype="multipart/form-data">
+    <label class="form-check-label" for="exampleCheck1">Select an image</label
+    ><br />
+    <input type="file" id="image" name="image" accept="" /><br /><br />
+    <button type="submit" href="#" class="btn btn-outline-primary">
+      Classify Image</button
+    ><br />
+
+    {% if fname and prediction %}
+    <div
+      class="row"
+      style="padding-left: 50px; padding-top: 80px; padding-right: 50px"
+    >
+      <div class="col-sm-6">
+        <img
+          src="{{fname}}"
+          class="card-img-top shadow p-6 mb-5 bg-white rounded"
+          height="350px"
+          width="100px"
+        />
+      </div>
+      <div class="col-sm-6">
+        <label
+          class="form-control shadow p-6 mb-5 bg-white rounded"
+          id="output"
+          rows="1"
+          placeholder=""
+          style="text-align: center; outline-color: blue; width: 25rem"
+          >{{ prediction }}</label
+        >
+      </div>
+    </div>
+
+    {% endif %}
+  </form>
+</div>
+{% endblock %}
