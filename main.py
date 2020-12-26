@@ -17,9 +17,11 @@ def home():
 def train_image():
     if request.method == 'POST':
         username = request.form["user_name"]
+        model_name = request.form["modelname"]
+        ratio = request.form["ratio"]
         batch_size = request.form["batch_size"]
         epoch = request.form["epoch"]
-        print(username,"  ", batch_size, "  ", epoch)
+        print(username,"  ", model_name, "  ", ratio, " " , batch_size, "  ", epoch, " ")
 
         username_error_message = ''
         batch_size_error_message = ''

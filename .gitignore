@@ -1,1 +1,3 @@
 .prettierignore
+.env
+.venv
