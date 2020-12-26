@@ -8,17 +8,30 @@
 <h1 style="padding-top: 20px">Customize the training!</h1>
 <hr />
 
-<form class="mt-5">
+<form class="mt-5" action="#" method="POST" enctype="multipart/form-data">
   <div class="form-row">
     <div class="form-group col-6 mx-auto">
       <div class="input-group">
         <div class="input-group-prepend">
           <span class="input-group-text">Username</span>
         </div>
-        <input type="text" class="form-control" required />
+        <input
+          type="text"
+          name="user_name"
+          class="form-control"
+          pattern="[a-zA-Z]+"
+          title="Task Name can contain only alphabets"
+          required
+        />
       </div>
+      <!-- <div>
+        <label style="font-size: small; color: red">
+          {{ username_errorMessage }}
+        </label>
+      </div> -->
     </div>
   </div>
+
   <div class="form-row mt-4">
     <div class="form-group col-6 mr-auto text-center">
       <div class="my-3">Select a model</div>
@@ -28,6 +41,7 @@
           id="customRadioInline1"
           name="customRadioInline1"
           class="custom-control-input"
+          checked
         />
         <label class="custom-control-label" for="customRadioInline1"
           ><h5>
@@ -44,7 +58,9 @@
         />
         <label class="custom-control-label" for="customRadioInline2"
           ><h5>
-            <span class="badge badge-pill badge-info">Resnet 34
+            <span class="badge badge-pill badge-info">Resnet 34</span>
+          </h5></label
+        >
       </div>
     </div>
     <div class="form-group col-6 ml-auto text-center">
@@ -53,8 +69,9 @@
         <input
           type="radio"
           id="customRadioInline3"
-          name="customRadioInline1"
+          name="customRadioInline2"
           class="custom-control-input"
+          checked
         />
         <label class="custom-control-label" for="customRadioInline3"
           ><h5>
@@ -66,7 +83,7 @@
         <input
           type="radio"
           id="customRadioInline4"
-          name="customRadioInline1"
+          name="customRadioInline2"
           class="custom-control-input"
         />
         <label class="custom-control-label" for="customRadioInline4"
@@ -77,6 +94,7 @@
       </div>
     </div>
   </div>
+
   <div class="form-row mt-4">
     <div class="col-1"></div>
     <div class="form-group col-4 mr-auto text-center">
@@ -89,6 +107,9 @@
           style="text-align: center"
           required
         />
+        <label style="font-size: x-small; color: red">
+          {{ batchSizeErrorMessage }}
+        </label>
       </div>
     </div>
     <div class="col"></div>
@@ -102,16 +123,20 @@
           style="text-align: center"
           required
         />
+        <label style="font-size: x-small; color: red">
+          {{ epochErrorMessage }}
+        </label>
       </div>
     </div>
     <div class="col-1"></div>
   </div>
+
   <div class="form-row">
     <div class="form-group col-12 text-center">
       <div class="input-group">
         <div>
           <h5><span class="badge badge-info">Upload dataset</span></h5>
-          <input type="file" id="dataset" name="dataset" accept="" required />
+          <input type="file" id="dataset" name="dataset" accept="" />
           <p style="font-size: small">
             The dataset should not be more than 200 MB. Recommended: If you have
             only two classes in your dataset, upload atleast 10 image of each
@@ -125,7 +150,12 @@
   </div>
   <div class="form-row">
     <div class="form-group col-12 mt-5 text-center">
-      <button type="submit" class="btn btn-outline-primary" onclick="showDiv()">
+      <button
+        type="submit"
+        class="btn btn-outline-primary"
+        href="image_training.html"
+        onclick="showDiv()"
+      >
         Begin training</button
       ><br /><br />
     </div>

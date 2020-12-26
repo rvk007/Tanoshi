@@ -1,9 +1,7 @@
+import os
+
 from flask import Flask, redirect, url_for, request, render_template
-from torchvision.models import resnet
-from torchvision import transforms
-import os 
-from PIL import Image
-from image_class import image_classes
+
 
 username = ''
 
@@ -15,9 +13,39 @@ def home():
     return render_template("home.html")
 
 
-@app.route('/image_training.html')
+@app.route('/image_training.html', methods=["GET","POST"])
 def train_image():
-    return render_template("image_training.html")
+    if request.method == 'POST':
+        username = request.form["user_name"]
+        batch_size = request.form["batch_size"]
+        epoch = request.form["epoch"]
+        print(username,"  ", batch_size, "  ", epoch)
+
+        username_error_message = ''
+        batch_size_error_message = ''
+        epoch_error_message = ''
+
+        if (not username.isalpha()) or username == None :
+            username_error_message = "Username must contain alphabets only."
+
+        if batch_size.isnumeric():
+            batch_size = int(batch_size)
+            if batch_size<1 or batch_size>128 or batch_size == None:
+                batch_size_error_message = 'Batch size must be between 1 and 128.'
+        else:
+            batch_size_error_message = 'Batch size must be a number.'
+
+        if epoch.isnumeric():
+            epoch = int(epoch)
+            if epoch<1 or epoch>10 or epoch == None:
+                epoch_error_message = "Number of epochs must be a number between 1 and 10."
+        else:
+            epoch_error_message = 'Batch size must be a number.'
+
+        print(username_error_message,"  ", batch_size_error_message, "  ", epoch_error_message)
+        return render_template("image_training.html", username_errorMessage=username_error_message, batch_size_errorMessage=batch_size_error_message, epoch_errorMessage=epoch_error_message)
+    else:
+        return render_template("image_training.html")
 
 
 @app.route('/text_training.html')
@@ -33,7 +61,7 @@ def inference():
     popup = False
     
     if popup:
-        return render_template("inference.html", popup = popup)
+        return render_template("inference.html", popup = popup, username=username)
     else:
         return render_template("inference.html")
 
@@ -55,27 +83,7 @@ def no_model_popup():
 
 @app.route('/image_inference.html', methods=["GET","POST"])
 def image_inference(filename=None):
-    if request.method == 'POST':
-        target = os.path.join(app_root, 'static/images')
-        f = request.files['image']
-        destination = '/'.join([target, f.filename])
-        f.save(destination)
-        img_path = '/'.join(["static/images", f.filename])
-
-        model = resnet.resnet34(pretrained=True)
-        model.eval()
-
-        transformations = transforms.Compose([
-            transforms.Resize(255),
-            transforms.CenterCrop(224),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-        ])
-        img_tensor = transformations(Image.open(img_path)).unsqueeze(0)
-        output  = image_classes[model(img_tensor).argmax().item()]
-        return render_template("image_inference.html", fname = img_path, prediction = output)
-    else:
-        return render_template("image_inference.html")
+    return render_template("image_inference.html")
 
 
 @app.route('/text_inference.html', methods=["GET","POST"])
