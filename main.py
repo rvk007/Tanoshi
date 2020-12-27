@@ -4,7 +4,7 @@ from random import randint
 
 from flask import Flask, redirect, url_for, request, render_template
 
-from util.helper import upload_file_to_s3
+from util.helper import upload_file_to_s3, upload_localfile_to_s3
 
 app = Flask(__name__)
 app_root = os.path.dirname(os.path.abspath(__file__))
@@ -61,15 +61,7 @@ def train_image():
 
         if file and allowed_file(file.filename):
             output = upload_file_to_s3(file) 
-            
-            # if upload success,will return file name of uploaded file
-            if output:
-                # write your code here 
-                # to save the file name in database
-
-                print("Success upload")
-
-            # upload failed, redirect to upload page
+            if output:print("Success upload")
             else:
                 print("Unable to upload, try again")
 
@@ -80,12 +72,14 @@ def train_image():
                  'ratio' : int(ratio),
                  'batchsize' : batch_size,
                  'epoch' : epoch,
-                 'filename' : file
+                 'filename' : file.filename
         }
 
-        #with open(user_name + '.txt', 'w') as outfile:
-        #    json.dump(data, outfile)
-        # json_output = upload_file_to_s3() 
+        filepath = os.path.join('userdata', user_name+'.txt')
+        
+        with open(filepath, 'w') as outfile:
+            json.dump(data, outfile)
+        json_output = upload_localfile_to_s3(filepath) 
         
 
         return render_template("image_training.html", username_errorMessage=username_error_message, batch_size_errorMessage=batch_size_error_message, epoch_errorMessage=epoch_error_message)

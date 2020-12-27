@@ -29,3 +29,17 @@ def upload_file_to_s3(file, acl="public-read"):
         # This is a catch all exception, edit this part to fit your needs.
         print("Error occured: ", e)
         return False
+
+def upload_localfile_to_s3(filename):
+    try:
+        s3.upload_file(
+        Bucket = config("AWS_BUCKET_NAME"),
+        Filename=filename,
+        Key=filename
+        )
+        return True
+
+    except Exception as e:
+        # This is a catch all exception, edit this part to fit your needs.
+        print("Error occured: ", e)
+        return False
