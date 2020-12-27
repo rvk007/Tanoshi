@@ -1,12 +1,22 @@
 import os
+import json 
+from random import randint
 
 from flask import Flask, redirect, url_for, request, render_template
 
-
-username = ''
+from util.helper import upload_file_to_s3
 
 app = Flask(__name__)
 app_root = os.path.dirname(os.path.abspath(__file__))
+
+PREFIX = '_tanoshi'
+ALLOWED_EXTENSIONS = {'zip', 'txt', 'jpeg'}
+
+# function to check file extension
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/')
 def home():
@@ -16,13 +26,16 @@ def home():
 @app.route('/image_training.html', methods=["GET","POST"])
 def train_image():
     if request.method == 'POST':
+
         username = request.form["user_name"]
         model_name = request.form["modelname"]
         ratio = request.form["ratio"]
         batch_size = request.form["batch_size"]
         epoch = request.form["epoch"]
-        print(username,"  ", model_name, "  ", ratio, " " , batch_size, "  ", epoch, " ")
+        file = request.files['dataset_file']
 
+        print(username,"  ", model_name, "  ", ratio, " " , batch_size, "  ", epoch, " ")
+        print('Filename', file)
         username_error_message = ''
         batch_size_error_message = ''
         epoch_error_message = ''
@@ -45,6 +58,36 @@ def train_image():
             epoch_error_message = 'Batch size must be a number.'
 
         print(username_error_message,"  ", batch_size_error_message, "  ", epoch_error_message)
+
+        if file and allowed_file(file.filename):
+            output = upload_file_to_s3(file) 
+            
+            # if upload success,will return file name of uploaded file
+            if output:
+                # write your code here 
+                # to save the file name in database
+
+                print("Success upload")
+
+            # upload failed, redirect to upload page
+            else:
+                print("Unable to upload, try again")
+
+        #dump data into a json file and push it to s3 bucket
+        user_name = PREFIX + '_image_' + username + '_' + str(randint(0,1000))
+        data = { 'username' : user_name,
+                 'model' : model_name,
+                 'ratio' : int(ratio),
+                 'batchsize' : batch_size,
+                 'epoch' : epoch,
+                 'filename' : file
+        }
+
+        #with open(user_name + '.txt', 'w') as outfile:
+        #    json.dump(data, outfile)
+        # json_output = upload_file_to_s3() 
+        
+
         return render_template("image_training.html", username_errorMessage=username_error_message, batch_size_errorMessage=batch_size_error_message, epoch_errorMessage=epoch_error_message)
     else:
         return render_template("image_training.html")

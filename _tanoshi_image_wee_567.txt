@@ -1,0 +1,1 @@
+{"username": "_tanoshi_image_wee_567", "model": "mobilenetv2", "ratio": 8, "batchsize": 32, "epoch": 3, "filename": 
