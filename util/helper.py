@@ -1,4 +1,6 @@
 import os
+from io import BytesIO
+import gzip
 import boto3, botocore
 from werkzeug.utils import secure_filename
 from decouple import config

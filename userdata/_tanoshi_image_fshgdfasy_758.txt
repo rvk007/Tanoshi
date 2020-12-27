@@ -1,1 +1,0 @@
-{"username": "_tanoshi_image_fshgdfasy_758", "model": "mobilenetv2", "ratio": 8, "batchsize": 3434, "epoch": 5, "filename": ""}
