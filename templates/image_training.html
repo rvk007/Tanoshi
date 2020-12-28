@@ -4,31 +4,33 @@
     document.getElementById("loading").style.display = "block";
   }
 </script>
+{% if alert %}
+<div class="alert alert-primary" style="display: none" role="alert">
+  {{ alert }}
+</div>
 
 <h1 style="padding-top: 20px">Customize the training!</h1>
 <hr />
 
-<form class="mt-5" action="{{url_for('train_image')}}" method="POST" enctype="multipart/form-data">
+<form
+  class="mt-5"
+  action="{{url_for('train_image')}}"
+  method="POST"
+  enctype="multipart/form-data"
+>
   <div class="form-row">
     <div class="form-group col-6 mx-auto">
       <div class="input-group">
         <div class="input-group-prepend">
           <span class="input-group-text">Username</span>
         </div>
-        <input
-          type="text"
-          name="user_name"
-          class="form-control"
-          pattern="[a-zA-Z]+"
-          title="Task Name can contain only alphabets"
-          required
-        />
+        <input type="text" name="user_name" class="form-control" required />
       </div>
-      <!-- <div>
+      <div>
         <label style="font-size: small; color: red">
           {{ username_errorMessage }}
         </label>
-      </div> -->
+      </div>
     </div>
   </div>
 
@@ -41,7 +43,7 @@
           id="model1"
           name="modelname"
           class="custom-control-input"
-          value = "mobilenetv2"
+          value="mobilenetv2"
           checked
         />
         <label class="custom-control-label" for="model1"
@@ -56,7 +58,7 @@
           id="model2"
           name="modelname"
           class="custom-control-input"
-          value = "resnet"
+          value="resnet"
         />
         <label class="custom-control-label" for="model2"
           ><h5>
@@ -73,7 +75,7 @@
           id="ratio1"
           name="ratio"
           class="custom-control-input"
-          value = "8"
+          value="8"
           checked
         />
         <label class="custom-control-label" for="ratio1"
@@ -88,7 +90,7 @@
           id="ratio2"
           name="ratio"
           class="custom-control-input"
-          value = "7"
+          value="7"
         />
         <label class="custom-control-label" for="ratio2"
           ><h5>
@@ -175,4 +177,4 @@
   </div>
 </form>
 
-{% if popup %} {% include 'popup.html' %} {% endif %} {% endblock %}
+{% if popup %} {% include 'popup_training.html' %} {% endif %} {% endblock %}

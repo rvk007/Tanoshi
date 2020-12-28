@@ -4,19 +4,12 @@ from random import randint
 
 from flask import Flask, redirect, url_for, request, render_template
 
-from util.helper import upload_file_to_s3, upload_localfile_to_s3
+from util.s3_helper import upload_file_to_s3, upload_localfile_to_s3, store_to_s3, read_from_s3
+from util.train_helper import training
 
+username = ''
 app = Flask(__name__)
 app_root = os.path.dirname(os.path.abspath(__file__))
-
-PREFIX = '_tanoshi'
-ALLOWED_EXTENSIONS = {'zip', 'txt', 'jpeg'}
-
-# function to check file extension
-def allowed_file(filename):
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 
 @app.route('/')
 def home():
@@ -25,71 +18,12 @@ def home():
 
 @app.route('/image_training.html', methods=["GET","POST"])
 def train_image():
-    if request.method == 'POST':
-
-        username = request.form["user_name"]
-        model_name = request.form["modelname"]
-        ratio = request.form["ratio"]
-        batch_size = request.form["batch_size"]
-        epoch = request.form["epoch"]
-        file = request.files['dataset_file']
-
-        print(username,"  ", model_name, "  ", ratio, " " , batch_size, "  ", epoch, " ")
-        print('Filename', file)
-        username_error_message = ''
-        batch_size_error_message = ''
-        epoch_error_message = ''
-
-        if (not username.isalpha()) or username == None :
-            username_error_message = "Username must contain alphabets only."
-
-        if batch_size.isnumeric():
-            batch_size = int(batch_size)
-            if batch_size<1 or batch_size>128 or batch_size == None:
-                batch_size_error_message = 'Batch size must be between 1 and 128.'
-        else:
-            batch_size_error_message = 'Batch size must be a number.'
-
-        if epoch.isnumeric():
-            epoch = int(epoch)
-            if epoch<1 or epoch>10 or epoch == None:
-                epoch_error_message = "Number of epochs must be a number between 1 and 10."
-        else:
-            epoch_error_message = 'Batch size must be a number.'
-
-        print(username_error_message,"  ", batch_size_error_message, "  ", epoch_error_message)
-
-        if file and allowed_file(file.filename):
-            output = upload_file_to_s3(file) 
-            if output:print("Success upload")
-            else:
-                print("Unable to upload, try again")
-
-        #dump data into a json file and push it to s3 bucket
-        user_name = PREFIX + '_image_' + username + '_' + str(randint(0,1000))
-        data = { 'username' : user_name,
-                 'model' : model_name,
-                 'ratio' : int(ratio),
-                 'batchsize' : batch_size,
-                 'epoch' : epoch,
-                 'filename' : file.filename
-        }
-
-        filepath = os.path.join('userdata', user_name+'.txt')
-        
-        with open(filepath, 'w') as outfile:
-            json.dump(data, outfile)
-        json_output = upload_localfile_to_s3(filepath) 
-        
-
-        return render_template("image_training.html", username_errorMessage=username_error_message, batch_size_errorMessage=batch_size_error_message, epoch_errorMessage=epoch_error_message)
-    else:
-        return render_template("image_training.html")
+    training(request, username, 'image_training', 'image')
 
 
 @app.route('/text_training.html')
 def train_text():
-    return render_template("text_training.html")
+    training(request, username, 'text_training', 'text')
 
 
 @app.route('/inference.html')
@@ -97,8 +31,8 @@ def inference():
     if request.method == 'POST':
         username = request.form["username"]
         
-    popup = False
-    
+    popup = True
+    username = 'qwertyuiop'
     if popup:
         return render_template("inference.html", popup = popup, username=username)
     else:
@@ -110,14 +44,19 @@ def tour():
     return render_template("tour.html")
 
 
-@app.route('/popup.html')
-def popup():
-    return render_template("popup.html")
+@app.route('/popup_upload.html')
+def popup_upload():
+    return render_template("popup_upload.html")
 
 
-@app.route('/no_model_popup.html')
-def no_model_popup():
-    return render_template("no_model_popup.html")
+@app.route('/popup_training.html')
+def popup_training():
+    return render_template("popup_training.html")
+
+
+@app.route('/popup_no_model.html')
+def popup_no_model():
+    return render_template("popup_no_model.html")
 
 
 @app.route('/image_inference.html', methods=["GET","POST"])
