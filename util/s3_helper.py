@@ -48,8 +48,10 @@ def upload_localfile_to_s3(filename):
         print("Error occured: ", e)
         return False
 
-def store_to_s3(data):
+def store_to_s3():
     filename = 'config.txt'
+    data = {'status' : 'close'}
+
     with open(filename, 'wb') as f:
         pickle.dump(data, f)
         f.close()

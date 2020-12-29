@@ -1,13 +1,13 @@
 import os
-import json 
+import json
 from random import randint
-
 from flask import Flask, redirect, url_for, request, render_template
 
+from util.train_helper import training, if_training, allowed_file
 from util.s3_helper import upload_file_to_s3, upload_localfile_to_s3, store_to_s3, read_from_s3
-from util.train_helper import training
 
 username = ''
+PREFIX = '_tanoshi'
 app = Flask(__name__)
 app_root = os.path.dirname(os.path.abspath(__file__))
 
@@ -18,12 +18,17 @@ def home():
 
 @app.route('/image_training.html', methods=["GET","POST"])
 def train_image():
-    training(request, username, 'image_training', 'image')
+    train_file = 'image_training'
+    if request.method == 'POST':
+        return training(request=request, train_file=train_file, task='image')
+    else:
+        return render_template(train_file+".html")
+                
 
 
 @app.route('/text_training.html')
 def train_text():
-    training(request, username, 'text_training', 'text')
+    return training(request, 'text_training', 'text')
 
 
 @app.route('/inference.html')

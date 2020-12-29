@@ -1,13 +1,15 @@
 {%extends 'index.html' %}{% block content%}
+
 <script>
   function showDiv() {
     document.getElementById("loading").style.display = "block";
   }
 </script>
 {% if alert %}
-<div class="alert alert-primary" style="display: none" role="alert">
-  {{ alert }}
+<div class="alert alert-warning" role="alert">
+  <i class="fas fa-exclamation-circle"></i>{{ alert }}
 </div>
+{% endif %}
 
 <h1 style="padding-top: 20px">Customize the training!</h1>
 <hr />
@@ -24,12 +26,14 @@
         <div class="input-group-prepend">
           <span class="input-group-text">Username</span>
         </div>
-        <input type="text" name="user_name" class="form-control" required />
-      </div>
-      <div>
-        <label style="font-size: small; color: red">
-          {{ username_errorMessage }}
-        </label>
+        <input
+          type="text"
+          name="user_name"
+          class="form-control"
+          pattern="[A-Za-z]+"
+          title="Username must contain alphabets only."
+          required
+        />
       </div>
     </div>
   </div>
@@ -111,11 +115,10 @@
           name="batch_size"
           type="text"
           style="text-align: center"
+          pattern="^[1-9]$|^[1-9][0-9]$|^(128)$"
+          title="Batch size must be a number between 1 and 128."
           required
         />
-        <label style="font-size: x-small; color: red">
-          {{ batchSizeErrorMessage }}
-        </label>
       </div>
     </div>
     <div class="col"></div>
@@ -127,11 +130,10 @@
           name="epoch"
           type="text"
           style="text-align: center"
+          pattern="^[1-9]$|^[1-9][0-9]$|^(10)$"
+          title="Epoch must be a number between 1 and 10."
           required
         />
-        <label style="font-size: x-small; color: red">
-          {{ epochErrorMessage }}
-        </label>
       </div>
     </div>
     <div class="col-1"></div>
