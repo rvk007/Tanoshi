@@ -1,4 +1,4 @@
-<!-- Modal -->
+{% include 'link.html' %}
 <div
   class="modal fade"
   id="exampleModal"
@@ -10,12 +10,12 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Upload Successful</h5>
+        <h5 class="modal-title" id="exampleModalLabel">{{ popupHeading }}</h5>
       </div>
       <div class="modal-body" style="text-align: center">
-        <p>{{ popup_message }}</p>
+        <p>{{ popupMessage }}</p>
         <br />
-        <p>{{ user_data }}</p>
+        <p>{{ userData }}</p>
       </div>
       <div class="modal-footer">
         <button
@@ -29,3 +29,4 @@
     </div>
   </div>
 </div>
+{% include 'script.html' %}

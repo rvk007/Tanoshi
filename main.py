@@ -1,7 +1,7 @@
 import os
 import json
 from random import randint
-from flask import Flask, redirect, url_for, request, render_template
+from flask import Flask, redirect, url_for, request, render_template, flash
 
 from util.train_helper import training, if_training, allowed_file
 from util.s3_helper import upload_file_to_s3, upload_localfile_to_s3, store_to_s3, read_from_s3
@@ -9,10 +9,14 @@ from util.s3_helper import upload_file_to_s3, upload_localfile_to_s3, store_to_s
 username = ''
 PREFIX = '_tanoshi'
 app = Flask(__name__)
+app.secret_key = "super secret key"
 app_root = os.path.dirname(os.path.abspath(__file__))
 
 @app.route('/')
 def home():
+    data = {'status' : 'sleeping',
+            'user_name' : ''}
+    store_to_s3(data)
     return render_template("home.html")
 
 

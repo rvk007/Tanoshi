@@ -2,13 +2,13 @@ import os
 import json
 from random import randint
 
-from flask import Flask, redirect, url_for, request, render_template 
+from flask import Flask, redirect, url_for, request, render_template, flash
 
 from util.s3_helper import upload_file_to_s3, upload_localfile_to_s3, store_to_s3, read_from_s3
 
 
 PREFIX = '_tanoshi'
-ALLOWED_EXTENSIONS = {'zip', 'txt', 'jpeg'}
+ALLOWED_EXTENSIONS = {'zip', 'txt', 'jpeg', 'jpg'}
 
 # function to check file extension
 def allowed_file(filename):
@@ -28,7 +28,6 @@ def training(request, train_file, task):
 
         alert_message = if_training()
         if alert_message:
-            print(alert_message)
             return render_template(train_file+".html", alert = alert_message)
 
         username = request.form["user_name"]
@@ -40,7 +39,6 @@ def training(request, train_file, task):
 
         if f and allowed_file(f.filename):
             output = upload_file_to_s3(f) 
-
             if output[0]:
                 #dump data into a json file and push it to s3 bucket
                 user_name = PREFIX + '_' + task + '_' + username + '_' + str(randint(0,1000))
@@ -53,21 +51,22 @@ def training(request, train_file, task):
                 }
 
                 filepath = user_name+'.txt'
-                
                 with open(filepath, 'w') as outfile:
                     json.dump(data, outfile)
                 upload_localfile_to_s3(filepath)
                 os.remove(filepath)
 
-                popup_heading = 'Upload Successfull!'
-                popup_message = 'Your dataset is successfully uploaded and training is in progress. Please wait for a while.'
-                user_data = 'Your username is: '+user_name+'. Kindly save it for inferencing.'
-
-                return render_template(train_file+".html", popup_heading=popup_heading, popup_message=popup_message, user_data=user_data)
+                upload_message = '  Dataset is successfully uploaded and training is in progress. Username: " '+user_name+' ". Kindly save it for inferencing.'
+                flash(upload_message)
+                data = {'status' : 'active'}
+                store_to_s3(data)
+                
+                return render_template(train_file+".html")
             else:
-                popup_heading = 'Upload Unsuccessfull.'
-                popup_message = 'An error occured:' + output[1] +'. Please try again.'
-                user_data = ''
+                upload_message = '  Upload Unsuccessfull. An error occured:' + output[1] +'. Please try again.'
+                flash(upload_message)
 
-                return render_template(train_file+".html", popup_heading=popup_heading, popup_message=popup_message, user_data=user_data)
+                return render_template(train_file+".html")
+        else:
+            return render_template(train_file+".html")
                 

@@ -7,7 +7,7 @@ import boto3, botocore
 from werkzeug.utils import secure_filename
 from decouple import config
 
-
+filename = 'config.pkl'
 s3 = boto3.client(
     "s3",
     aws_access_key_id=config('AWS_ACCESS_KEY'),
@@ -16,7 +16,6 @@ s3 = boto3.client(
 
 
 def upload_file_to_s3(file, acl="public-read"):
-    filename = secure_filename(file.filename)
     try:
         s3.upload_fileobj(
             file,
@@ -48,10 +47,7 @@ def upload_localfile_to_s3(filename):
         print("Error occured: ", e)
         return False
 
-def store_to_s3():
-    filename = 'config.txt'
-    data = {'status' : 'close'}
-
+def store_to_s3(data):
     with open(filename, 'wb') as f:
         pickle.dump(data, f)
         f.close()
@@ -61,9 +57,9 @@ def store_to_s3():
         Filename=filename,
         Key='config'
     )
+    os.remove(filename)
 
 def read_from_s3():
-    filename = 'config.txt'
     s3.download_file(
         Bucket=config("AWS_BUCKET_NAME"),
         Filename=filename,
@@ -73,7 +69,8 @@ def read_from_s3():
     with open(filename, 'rb') as f:
         data = f.read()
 
-    config_data = pickle.loads(data)
+    config_data = json.loads(data)
+    os.remove(filename)
     return config_data
 
 
