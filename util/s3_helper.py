@@ -1,13 +1,11 @@
 import os
 import json
 import pickle
-from io import BytesIO
-import gzip
-import boto3, botocore
-from werkzeug.utils import secure_filename
+import boto3
 from decouple import config
 
-filename = 'config.pkl'
+
+PREFIX = 'training/'
 s3 = boto3.client(
     "s3",
     aws_access_key_id=config('AWS_ACCESS_KEY'),
@@ -16,6 +14,7 @@ s3 = boto3.client(
 
 
 def upload_file_to_s3(file, acl="public-read"):
+    """Upload dataset"""
     try:
         s3.upload_fileobj(
             file,
@@ -26,52 +25,62 @@ def upload_file_to_s3(file, acl="public-read"):
                 "ContentType": file.content_type
             }
         )
-        return [True,'']
+        return [True, '']
 
     except Exception as e:
         # This is a catch all exception, edit this part to fit your needs.
         print("Error occured: ", e)
         return [False, e]
 
+
 def upload_localfile_to_s3(filename):
+    """Upload userdata"""
     try:
         s3.upload_file(
-        Bucket = config("AWS_BUCKET_NAME"),
-        Filename=filename,
-        Key=filename
+            Bucket=config("AWS_BUCKET_NAME"),
+            Filename=PREFIX+filename,
+            Key=filename
         )
         return True
-
     except Exception as e:
         # This is a catch all exception, edit this part to fit your needs.
         print("Error occured: ", e)
         return False
 
-def store_to_s3(data):
+
+def store_to_s3(filename, data):
+    """Update config"""
     with open(filename, 'wb') as f:
         pickle.dump(data, f)
         f.close()
-
     s3.upload_file(
         Bucket=config("AWS_BUCKET_NAME"),
         Filename=filename,
         Key='config'
     )
-    os.remove(filename)
+    # os.remove(filename)
 
-def read_from_s3():
+
+def read_from_s3(filename):
+    """Read config"""
     s3.download_file(
         Bucket=config("AWS_BUCKET_NAME"),
         Filename=filename,
         Key='config'
     )
-    
     with open(filename, 'rb') as f:
         data = f.read()
 
-    config_data = json.loads(data)
-    os.remove(filename)
+    config_data = pickle.loads(data)
+    # os.remove(filename)
     return config_data
 
 
+def read_bucket():
+    """Read contents of a s3 bucket"""
+    content = s3.list_objects(Bucket=config("AWS_BUCKET_NAME", Prefix=PREFIX))
+    for item in content.get('Contents', []):
+        yield item.get('Key')
 
+def put_on_s3():
+    s3.put_object(Bucket=config("AWS_BUCKET_NAME"),)
