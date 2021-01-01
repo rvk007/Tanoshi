@@ -2,17 +2,20 @@
 
 <script>
   function showDiv() {
-    document.getElementById("loading").style.display = "block";
+    document.getElementById('loading').style.display = 'block';
   }
 </script>
 
-{% with messages = get_flashed_messages() %} {% if messages %} {% for message in
-messages %}
+<!-- prettier-ignore -->
+{% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
 <div class="alert alert-info mt-4" role="alert">
   <i class="far fa-edit"></i>
   {{ message }}
 </div>
-{% endfor %} {% endif%} {% endwith %} {% if alert %}
+{% endfor %} {% endif%} {% endwith %}
+
+<!-- prettier-ignore -->
+{% if alert %}
 <div class="alert alert-warning" role="alert">
   <i class="fas fa-exclamation-circle"></i>{{ alert }}
 </div>
@@ -171,7 +174,7 @@ messages %}
         href="image_training.html"
         onclick="showDiv()"
       >
-        Begin training</button
+        Begin Training</button
       ><br /><br />
     </div>
   </div>
