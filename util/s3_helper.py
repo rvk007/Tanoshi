@@ -13,41 +13,6 @@ s3 = boto3.client(
 )
 
 
-def upload_file_to_s3(file, acl="public-read"):
-    """Upload dataset"""
-    try:
-        s3.upload_fileobj(
-            file,
-            config("AWS_BUCKET_NAME"),
-            file.filename,
-            ExtraArgs={
-                "ACL": acl,
-                "ContentType": file.content_type
-            }
-        )
-        return [True, '']
-
-    except Exception as e:
-        # This is a catch all exception, edit this part to fit your needs.
-        print("Error occured: ", e)
-        return [False, e]
-
-
-def upload_localfile_to_s3(filename):
-    """Upload userdata"""
-    try:
-        s3.upload_file(
-            Bucket=config("AWS_BUCKET_NAME"),
-            Filename=PREFIX+filename,
-            Key=filename
-        )
-        return True
-    except Exception as e:
-        # This is a catch all exception, edit this part to fit your needs.
-        print("Error occured: ", e)
-        return False
-
-
 def store_to_s3(filename, data):
     """Update config"""
     with open(filename, 'wb') as f:
@@ -56,17 +21,18 @@ def store_to_s3(filename, data):
     s3.upload_file(
         Bucket=config("AWS_BUCKET_NAME"),
         Filename=filename,
-        Key='config'
+        Key='config.pkl'
     )
     # os.remove(filename)
 
 
 def read_from_s3(filename):
     """Read config"""
+    print('filename', filename)
     s3.download_file(
         Bucket=config("AWS_BUCKET_NAME"),
         Filename=filename,
-        Key='config'
+        Key='config.pkl'
     )
     with open(filename, 'rb') as f:
         data = f.read()
@@ -82,5 +48,26 @@ def read_bucket():
     for item in content.get('Contents', []):
         yield item.get('Key')
 
-def put_on_s3():
-    s3.put_object(Bucket=config("AWS_BUCKET_NAME"),)
+
+def put_on_s3(filename):
+    """Put a file in a folder(PREFIX) present in s3 bucket on AWS"""
+    try:
+        s3.put_object(Bucket=config("AWS_BUCKET_NAME"), Key=PREFIX + filename)
+        return [True, '']
+
+    except Exception as e:
+        # This is a catch all exception, edit this part to fit your needs.
+        print("Error occured: ", e)
+        return [False, e]
+
+
+def get_from_s3(username):
+    """Get a file in a folder(PREFIX) present in s3 bucket on AWS"""
+    try:
+        model_object = s3.get_object(Bucket=config("AWS_BUCKET_NAME"), Key=f'{PREFIX}{username}.pt')
+        return [True, model_object]
+
+    except Exception as e:
+        # This is a catch all exception, edit this part to fit your needs.
+        print("Error occured: ", e)
+        return [False, e]

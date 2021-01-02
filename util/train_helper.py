@@ -6,7 +6,7 @@ from random import randint
 from datetime import datetime
 from flask import render_template, flash
 
-from util.s3_helper import upload_file_to_s3, upload_localfile_to_s3, store_to_s3, read_from_s3
+from util.s3_helper import store_to_s3, read_from_s3, put_on_s3
 
 
 PREFIX = 'tanoshi'
@@ -25,7 +25,7 @@ def if_training():
     print("33")
     config_data = read_from_s3(config_filename)
     print("11")
-    config_data['status'] = 'sleeping'
+    #config_data['status'] = 'sleeping'
     if config_data['status'] == 'active':
         return [' A model is training now. Please try again in sometime.', config_data]
     else:
@@ -47,9 +47,6 @@ def training(request, train_file, task):
         batch_size = request.form["batch_size"]
         epoch = request.form["epoch"]
         f = request.files['dataset_file']
-        # f.seek(0, os.SEEK_END)
-        # file_size = f.tell()
-        # print(file_size)
 
         user_name = PREFIX + '-' + username + '-' + str(randint(0, 1000))
         # if username exists
@@ -57,7 +54,8 @@ def training(request, train_file, task):
 
         if f and allowed_file(f.filename):
             print("2")
-            output = upload_file_to_s3(f)
+            output = put_on_s3(f.filename)
+            print(output)
             if output[0]:
                 print("3")
                 # dump data into a json file and push it to s3 bucket
@@ -74,8 +72,15 @@ def training(request, train_file, task):
                 filepath = user_name + '.txt'
                 with open(filepath, 'wb') as outfile:
                     pickle.dump(data, outfile)
-                upload_localfile_to_s3(filepath)
+                put_on_s3(filepath)
+                
+                # will be deleted later as this has to be done by ec2
+                trained_model_path = f'{user_name}.pt'
+                os.rename('resnet34.pt', trained_model_path)
+                put_on_s3(trained_model_path)
+                # till here
                 # os.remove(filepath)
+                
                 print('4')
                 upload_message = (
                     '  Dataset is successfully uploaded and training is in progress.'

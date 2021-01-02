@@ -1,8 +1,11 @@
 import os
+from PIL import Image
+from torchvision import transforms
 from flask import Flask, request, render_template, redirect, url_for, flash
 
+from image_class import image_classes
 from util.train_helper import training
-from util.inference_helper import username_found
+from util.inference_helper import username_found, get_model
 from util.s3_helper import store_to_s3
 
 
@@ -19,13 +22,13 @@ config_filename = 'config.pkl'
 
 @app.route('/')
 def home():
-    # data = {'status': 'sleeping',
-    #         'user_name': 'none',
-    #         'list_of_users': {'image': {},
-    #                           'text': {}
-    #                           }
-    #         }
-    # store_to_s3(config_filename, data)
+    data = {'status': 'sleeping',
+            'user_name': 'none',
+            'list_of_users': {'image': {},
+                              'text': {}
+                              }
+            }
+    store_to_s3(config_filename, data)
     return render_template('home.html')
 
 
@@ -57,7 +60,7 @@ def inference():
         task = username_found(username)
         if task:
             print("task ", task)
-            return redirect(url_for(f'{task}_inference'))
+            return redirect(url_for(f'{task}_inference', user_name=username))
         else:
             flash(' Username is incorrect. Please enter a valid username.')
             return render_template('inference.html')
@@ -85,18 +88,43 @@ def popup_no_model():
     return render_template('popup_no_model.html')
 
 
-@app.route('/image_inference.html', methods=['GET', 'POST'])
-def image_inference(filename=None):
-    print("in  image")
-    return render_template('image_inference.html')
+@app.route('/image_inference.html/<user_name>', methods=['GET', 'POST'])
+def image_inference(user_name):
+    if request.method == 'POST':
+        image_file = request.files['input_image']
+        destination = os.path.join(app_root, 'static/images')
+        destination = '/'.join([destination, image_file.filename])
+        image_file.save(destination)
+        image_path = '/'.join(['/static/images', image_file.filename])
+        model = get_model(user_name)
+        if model[0]:
+            transformations = transforms.Compose([
+                transforms.Resize(224),
+                transforms.CenterCrop(224),
+                transforms.ToTensor(),
+                transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+            ])
+            image_tensor = transformations(Image.open(destination)).unsqueeze(0)
+            output = image_classes[model[1](image_tensor).argmax().item()]
+            return render_template('image_inference.html', file_name=image_path, prediction=output)
+        else:
+            flash(f'An error has occured: {model[1]}')
+            return render_template('image_inference.html')
+    else:
+        return render_template('image_inference.html')
 
 
 @app.route('/text_inference.html', methods=['GET', 'POST'])
-def text_inference():
+def text_inference(user_name=None):
     if request.method == 'POST':
         inputSentence = request.form['inputSentence']
-        output = 'Positive'
-        return render_template('text_inference.html', input_Sentence=inputSentence, prediction=output)
+        model = get_model(user_name)
+        if model[0]:
+            output = 'Positive'
+            return render_template('image_inference.html', input_Sentence=inputSentence, prediction=output)
+        else:
+            flash(f'An error has occured: {model[1]}')
+            return render_template('image_inference.html')
     else:
         return render_template('text_inference.html')
 

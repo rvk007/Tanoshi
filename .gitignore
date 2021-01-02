@@ -7,3 +7,5 @@ __pycache__
 trial.zip
 trial
 .DS_Store
+resnet34.pt
+config.pkl
