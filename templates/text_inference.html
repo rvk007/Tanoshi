@@ -17,6 +17,11 @@
       style="padding-left: 50px; padding-top: 80px; padding-right: 50px"
     >
       <div class="col-sm-6">
+        <div class="my-3">
+          <span class="badge badge-pill badge-info"
+            ><h7>Input Sentence</h7></span
+          >
+        </div>
         <textarea
           class="form-control shadow p-3 mb-5 bg-white rounded"
           name="inputSentence"
@@ -30,6 +35,9 @@
       </div>
       {% if prediction %}
       <div class="col-sm-6">
+        <div class="my-3">
+          <span class="badge badge-pill badge-info"><h7>Prediction</h7></span>
+        </div>
         <label
           class="form-control shadow p-6 mb-5 bg-white rounded"
           id="output"

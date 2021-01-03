@@ -1,22 +1,49 @@
 {%extends 'index.html' %}{% block content%}
 
 <script>
-  function showDiv() {
-    document.getElementById("loading").style.display = "block";
+  function showDivLoad() {
+    document.getElementById('loadingID').style.display = 'block';
   }
 </script>
+
+<!-- prettier-ignore -->
+{% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+<div class="alert alert-info mt-4" role="alert">
+  <i class="far fa-edit"></i>
+  {{ message }}
+</div>
+{% endfor %} {% endif%} {% endwith %}
+
+<!-- prettier-ignore -->
+{% if alert %}
+<div class="alert alert-warning mt-4" role="alert">
+  <i class="fas fa-exclamation-circle"></i>{{ alert }}
+</div>
+{% endif %}
 
 <h1 style="padding-top: 20px">Customize the training!</h1>
 <hr />
 
-<form class="mt-5">
+<form
+  class="mt-5"
+  action="{{url_for('train_text')}}"
+  method="POST"
+  enctype="multipart/form-data"
+>
   <div class="form-row">
     <div class="form-group col-6 mx-auto">
       <div class="input-group">
         <div class="input-group-prepend">
           <span class="input-group-text">Username</span>
         </div>
-        <input type="text" class="form-control" required />
+        <input
+          type="text"
+          name="user_name"
+          class="form-control"
+          pattern="[A-Za-z]+"
+          title="Username must contain alphabets only."
+          required
+        />
       </div>
     </div>
   </div>
@@ -27,26 +54,29 @@
       <div class="custom-control custom-radio custom-control-inline">
         <input
           type="radio"
-          id="customRadioInline1"
-          name="customRadioInline1"
+          id="model1"
+          name="modelname"
           class="custom-control-input"
+          value="mobilenetv2"
+          checked
         />
-        <label class="custom-control-label" for="customRadioInline1"
+        <label class="custom-control-label" for="model1"
           ><h5>
-            <span class="badge badge-pill badge-info">Bidirectional LSTM</span>
+            <span class="badge badge-pill badge-info">Upgrade SA</span>
           </h5></label
         >
       </div>
       <div class="custom-control custom-radio custom-control-inline">
         <input
           type="radio"
-          id="customRadioInline2"
-          name="customRadioInline1"
+          id="model2"
+          name="modelname"
           class="custom-control-input"
+          value="resnet"
         />
-        <label class="custom-control-label" for="customRadioInline2"
+        <label class="custom-control-label" for="model2"
           ><h5>
-            <span class="badge badge-pill badge-info">Embedding-Linear</span>
+            <span class="badge badge-pill badge-info">Faster SA</span>
           </h5></label
         >
       </div>
@@ -56,11 +86,13 @@
       <div class="custom-control custom-radio custom-control-inline">
         <input
           type="radio"
-          id="customRadioInline3"
-          name="customRadioInline2"
+          id="ratio1"
+          name="ratio"
           class="custom-control-input"
+          value="8"
+          checked
         />
-        <label class="custom-control-label" for="customRadioInline3"
+        <label class="custom-control-label" for="ratio1"
           ><h5>
             <span class="badge badge-pill badge-info">80: 20</span>
           </h5></label
@@ -69,11 +101,12 @@
       <div class="custom-control custom-radio custom-control-inline">
         <input
           type="radio"
-          id="customRadioInline4"
-          name="customRadioInline2"
+          id="ratio2"
+          name="ratio"
           class="custom-control-input"
+          value="7"
         />
-        <label class="custom-control-label" for="customRadioInline4"
+        <label class="custom-control-label" for="ratio2"
           ><h5>
             <span class="badge badge-pill badge-info">70 : 30</span>
           </h5></label
@@ -92,6 +125,8 @@
           name="batch_size"
           type="text"
           style="text-align: center"
+          pattern="^[1-9]$|^[1-9][0-9]$|^(128)$"
+          title="Batch size must be a number between 1 and 128."
           required
         />
       </div>
@@ -105,6 +140,8 @@
           name="epoch"
           type="text"
           style="text-align: center"
+          pattern="^[1-9]$|^[1-9][0-9]$|^(10)$"
+          title="Epoch must be a number between 1 and 10."
           required
         />
       </div>
@@ -117,7 +154,7 @@
       <div class="input-group">
         <div>
           <h5><span class="badge badge-info">Upload dataset</span></h5>
-          <input type="file" id="dataset" name="dataset" accept="" required />
+          <input type="file" id="dataset" name="dataset_file" accept="" />
           <p style="font-size: small">
             The dataset should not be more than 200 MB. Recommended: If you have
             only two classes in your dataset, upload atleast 10 image of each
@@ -129,17 +166,21 @@
       </div>
     </div>
   </div>
-
   <div class="form-row">
     <div class="form-group col-12 mt-5 text-center">
-      <button type="submit" class="btn btn-outline-primary" onclick="showDiv()">
-        Begin training</button
+      <button
+        type="submit"
+        class="btn btn-outline-primary"
+        href="#"
+        onclick="showDivLoad()"
+      >
+        Begin Training</button
       ><br /><br />
     </div>
   </div>
   <div class="form-row">
     <div class="form-group col-12 text-center">
-      <div id="loading" style="display: none; padding-left: 10px">
+      <div id="loadingID" style="display: none; padding-left: 10px">
         <div class="spinner-grow text-info"></div>
         <div class="spinner-grow text-primary"></div>
         <div class="spinner-grow text-info"></div>
@@ -147,5 +188,4 @@
     </div>
   </div>
 </form>
-
-{% if popup %} {% include 'popup.html' %} {% endif %} {% endblock %}
+{% if popup %} {% include 'popup_training.html' %} {% endif %} {% endblock %}

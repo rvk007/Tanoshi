@@ -44,7 +44,10 @@ def training(request, train_file, task):
         username = request.form["user_name"]
         model_name = request.form["modelname"]
         ratio = request.form["ratio"]
+        # loss_function = request.form["lossfunction"]
+        # optimizer = request.form["optimizer"]
         batch_size = request.form["batch_size"]
+        # learning_rate = request.form["learningrate"]
         epoch = request.form["epoch"]
         f = request.files['dataset_file']
 
@@ -59,7 +62,22 @@ def training(request, train_file, task):
             if output[0]:
                 print("3")
                 # dump data into a json file and push it to s3 bucket
+                # data = {
+                #     'task': task,
+                #     'username': user_name,
+                #     'model': model_name,
+                #     'ratio': int(ratio),
+                #     'loss_function': loss_function,
+                #     'optimizer': optimizer,
+                #     'batchsize': batch_size,
+                #     'epochs': epoch,
+                #     'learning_rate': learning_rate,
+                #     'filename': f.filename,
+                #     'training': 'started'
+                # }
+
                 data = {
+                    'task': task,
                     'username': user_name,
                     'model': model_name,
                     'ratio': int(ratio),
@@ -75,9 +93,11 @@ def training(request, train_file, task):
                 put_on_s3(filepath)
                 
                 # will be deleted later as this has to be done by ec2
-                trained_model_path = f'{user_name}.pt'
-                os.rename('resnet34.pt', trained_model_path)
-                put_on_s3(trained_model_path)
+
+                # TESTING TEXT
+                # trained_model_path = f'{user_name}.pt'
+                # os.rename('resnet34.pt', trained_model_path)
+                # put_on_s3(trained_model_path)
                 # till here
                 # os.remove(filepath)
                 

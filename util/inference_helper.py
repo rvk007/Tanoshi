@@ -1,9 +1,12 @@
 import io
 import torch
+import pickle
+import torchtext
 from torchvision.models import resnet
 
-
 from util.s3_helper import read_bucket, read_from_s3, get_from_s3
+from util.text_model import RNN
+
 
 config_filename = 'config.pkl'
 
@@ -26,7 +29,7 @@ def username_found(username):
         return False
 
 
-def get_model(username):
+def get_image_model(username):
     try:
         model_path = f'{username}.pt'
         get_from_s3(username)
@@ -35,5 +38,42 @@ def get_model(username):
     except Exception as e:
         # This is a catch all exception, edit this part to fit your needs.
         print("Error occured: ", e)
+        return [False, e]
+
+
+def read_metadata(metadata_path):
+    with open(metadata_path, 'rb') as f:
+        metadata = pickle.load(f)
+        input_stoi = metadata['input_stoi']
+        label_itos = metadata['label_itos']
+    return input_stoi, label_itos
+
+
+def load_model(model_path, input_stoi):
+    model = RNN(
+        len(set(input_stoi.values())), 100, 256, 1, 
+        2, True, 0.5, input_stoi['<pad>']
+    )
+    model.load_state_dict(torch.load(model_path))
+    model = model.eval()
+    return model
+
+
+def get_text_model(sentence, model_path, metadata_path):
+    try:
+        print("11")
+        input_stoi, label_itos = read_metadata(metadata_path)
+        print("22")
+        model = load_model(model_path, input_stoi)
+        print("33")
+        tokenized = [tok for tok in sentence.split()]
+        indexed = [input_stoi[t] for t in tokenized]
+        tensor = torch.LongTensor(indexed)
+        tensor = tensor.unsqueeze(1)
+        length_tensor = torch.LongTensor([len(indexed)])
+        prediction = torch.sigmoid(model(tensor, length_tensor))
+
+        return [True, label_itos[round(prediction.item())]]
+    except Exception as e:
         return [False, e]
 

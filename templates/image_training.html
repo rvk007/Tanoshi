@@ -116,8 +116,91 @@
   </div>
 
   <div class="form-row mt-4">
-    <div class="col-1"></div>
-    <div class="form-group col-4 mr-auto text-center">
+    <div class="form-group col-6 mr-auto text-left">
+      <div class="my-3">Select a loss function</div>
+      <div class="custom-control custom-radio">
+        <input
+          type="radio"
+          id="loss1"
+          name="lossfunction"
+          class="custom-control-input"
+          value="crossentropy"
+          checked
+        />
+        <label class="custom-control-label" for="loss1"
+          ><h5>
+            <span class="badge badge-pill badge-info">Cross Entropy</span>
+          </h5></label
+        >
+      </div>
+      <div class="custom-control custom-radio">
+        <input
+          type="radio"
+          id="loss2"
+          name="lossfunction"
+          class="custom-control-input"
+          value="bce"
+        />
+        <label class="custom-control-label" for="loss2"
+          ><h5>
+            <span class="badge badge-pill badge-info"
+              >Binary Cross Entropy</span
+            >
+          </h5></label
+        >
+      </div>
+      <div class="custom-control custom-radio">
+        <input
+          type="radio"
+          id="loss3"
+          name="lossfunction"
+          class="custom-control-input"
+          value="mse"
+        />
+        <label class="custom-control-label" for="loss3"
+          ><h5>
+            <span class="badge badge-pill badge-info">Mean Squared</span>
+          </h5></label
+        >
+      </div>
+    </div>
+    <div class="form-group col-6 ml-auto text-center">
+      <div class="my-3">Select an optimizer</div>
+      <div class="custom-control custom-radio">
+        <input
+          type="radio"
+          id="optim1"
+          name="optimizer"
+          class="custom-control-input"
+          value="sgd"
+          checked
+        />
+        <label class="custom-control-label" for="optim1"
+          ><h5>
+            <span class="badge badge-pill badge-info">SGD</span>
+          </h5></label
+        >
+      </div>
+      <div class="custom-control custom-radio">
+        <input
+          type="radio"
+          id="optim2"
+          name="optimizer"
+          class="custom-control-input"
+          value="adam"
+        />
+        <label class="custom-control-label" for="optim2"
+          ><h5>
+            <span class="badge badge-pill badge-info">Adam</span>
+          </h5></label
+        >
+      </div>
+    </div>
+  </div>
+
+  <div class="form-row mt-4">
+    <!-- <div class="col-1"></div> -->
+    <div class="form-group col-3 mr-auto text-center">
       <div class="my-3">Batch Size</div>
       <div>
         <input
@@ -125,14 +208,29 @@
           name="batch_size"
           type="text"
           style="text-align: center"
-          pattern="^[1-9]$|^[1-9][0-9]$|^(128)$"
+          pattern="^[1-9]$|^[1-9][0-9]$|^[1-9][0-2][0-8]$"
           title="Batch size must be a number between 1 and 128."
           required
         />
       </div>
     </div>
-    <div class="col"></div>
-    <div class="form-group col-4 mr-auto text-center">
+    <div class="col-1"></div>
+    <div class="form-group col-3 mr-auto text-center">
+      <div class="my-3">Learning Rate</div>
+      <div>
+        <input
+          class="form-control shadow p-3 mb-5 bg-white rounded"
+          name="learning_rate"
+          type="text"
+          style="text-align: center"
+          pattern="^0\.[0-9]{4}[1-9]$|^[1-2]$"
+          title="Learning rate must be a number between 0.00001 and 2."
+          required
+        />
+      </div>
+    </div>
+    <div class="col-1"></div>
+    <div class="form-group col-3 mr-auto text-center">
       <div class="my-3">Epoch</div>
       <div>
         <input
@@ -140,13 +238,13 @@
           name="epoch"
           type="text"
           style="text-align: center"
-          pattern="^[1-9]$|^[1-9][0-9]$|^(10)$"
+          pattern="^[1-9]$|^(10)$"
           title="Epoch must be a number between 1 and 10."
           required
         />
       </div>
     </div>
-    <div class="col-1"></div>
+    <!-- <div class="col-1"></div> -->
   </div>
 
   <div class="form-row">

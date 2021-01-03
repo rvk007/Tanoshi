@@ -9,3 +9,5 @@ trial
 .DS_Store
 resnet34.pt
 config.pkl
+*.pt
+*.pkl
