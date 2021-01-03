@@ -10,10 +10,20 @@ from util.text_model import RNN
 
 config_filename = 'config.pkl'
 
+
 def in_bucket(filename):
     list_of_files = read_bucket()
-    print(list_of_files)
     if filename in list_of_files:
+        return True
+    else:
+        return False
+
+
+def if_username_taken(username):
+    config_data = read_from_s3(config_filename)
+    if username in config_data['list_of_users']['image'].keys():
+        return True
+    elif username in config_data['list_of_users']['text'].keys():
         return True
     else:
         return False
@@ -32,12 +42,12 @@ def username_found(username):
 def get_image_model(username):
     try:
         model_path = f'{username}.pt'
+        model_path = 'resnet34.pt'
         get_from_s3(username)
         model = torch.jit.load(model_path)
         return [True, model]
     except Exception as e:
         # This is a catch all exception, edit this part to fit your needs.
-        print("Error occured: ", e)
         return [False, e]
 
 
@@ -61,11 +71,8 @@ def load_model(model_path, input_stoi):
 
 def get_text_model(sentence, model_path, metadata_path):
     try:
-        print("11")
         input_stoi, label_itos = read_metadata(metadata_path)
-        print("22")
         model = load_model(model_path, input_stoi)
-        print("33")
         tokenized = [tok for tok in sentence.split()]
         indexed = [input_stoi[t] for t in tokenized]
         tensor = torch.LongTensor(indexed)
@@ -76,4 +83,3 @@ def get_text_model(sentence, model_path, metadata_path):
         return [True, label_itos[round(prediction.item())]]
     except Exception as e:
         return [False, e]
-

@@ -7,17 +7,17 @@
 </div>
 {% endfor %} {% endif%} {% endwith %}
 
-<h1 style="padding-top: 20px">Image Classification Inference</h1>
+<h1 class="mt-5" style="padding-top: 20px">Image Classification Inference</h1>
 
 <div>
-  <form action="#" method="POST" enctype="multipart/form-data">
+  <form class="mt-3" action="#" method="POST" enctype="multipart/form-data">
     <label class="form-check-label" for="exampleCheck1">Select an image</label
     ><br />
     <input type="file" id="image" name="input_image" accept="" /><br /><br />
     <button
       type="submit"
       href="image_inference.html"
-      class="btn btn-outline-primary"
+      class="btn btn-outline-primary mt-2"
     >
       Classify Image</button
     ><br />
@@ -28,14 +28,20 @@
       style="padding-left: 50px; padding-top: 80px; padding-right: 50px"
     >
       <div class="col-sm-6">
+        <div class="my-3">
+          <span class="badge badge-pill badge-info"><h7>Input Image</h7></span>
+        </div>
         <img
-          src="/static/images/luca-bravo-O453M2Liufs-unsplash.jpg"
+          src="{{file_name}}"
           class="card-img-top shadow p-6 mb-5 bg-white rounded"
           height="350px"
           width="100px"
         />
       </div>
       <div class="col-sm-6">
+        <div class="my-3">
+          <span class="badge badge-pill badge-info"><h7>Prediction</h7></span>
+        </div>
         <label
           class="form-control shadow p-6 mb-5 bg-white rounded"
           id="output"

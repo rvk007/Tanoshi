@@ -28,7 +28,6 @@ def store_to_s3(filename, data):
 
 def read_from_s3(filename):
     """Read config"""
-    print('filename', filename)
     s3.download_file(
         Bucket=config("AWS_BUCKET_NAME"),
         Filename=filename,
@@ -57,7 +56,6 @@ def put_on_s3(filename):
 
     except Exception as e:
         # This is a catch all exception, edit this part to fit your needs.
-        print("Error occured: ", e)
         return [False, e]
 
 
@@ -69,5 +67,4 @@ def get_from_s3(username):
 
     except Exception as e:
         # This is a catch all exception, edit this part to fit your needs.
-        print("Error occured: ", e)
         return [False, e]

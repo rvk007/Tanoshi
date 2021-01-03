@@ -22,13 +22,13 @@ config_filename = 'config.pkl'
 
 @app.route('/')
 def home():
-    data = {'status': 'sleeping',
-            'user_name': 'none',
-            'list_of_users': {'image': {},
-                              'text': {}
-                              }
-            }
-    store_to_s3(config_filename, data)
+    # data = {'status': 'sleeping',
+    #         'user_name': 'none',
+    #         'list_of_users': {'image': {},
+    #                           'text': {}
+    #                           }
+    #         }
+    # store_to_s3(config_filename, data)
     return render_template('home.html')
 
 
@@ -94,8 +94,9 @@ def image_inference(user_name):
     if request.method == 'POST':
         image_file = request.files['input_image']
         destination = os.path.join(app_root, 'static/images')
-        for files in destination:
-            os.remove(files)
+        for files in os.listdir(destination):
+            print("here", files)
+            os.remove(os.path.join(destination, files))
 
         destination = '/'.join([destination, image_file.filename])
         image_file.save(destination)
@@ -110,6 +111,7 @@ def image_inference(user_name):
             ])
             image_tensor = transformations(Image.open(destination)).unsqueeze(0)
             output = image_classes[model[1](image_tensor).argmax().item()]
+            print("image_path ", image_path)
             return render_template('image_inference.html', file_name=image_path, prediction=output)
         else:
             flash(f'An error has occured: {model[1]}')

@@ -1,14 +1,14 @@
 {%extends 'index.html' %}{% block content%}
 
 <script>
-  function showDivLoad() {
-    document.getElementById('loadingID').style.display = 'block';
+  function showDiv() {
+    document.getElementById('loading').style.display = 'block';
   }
 </script>
 
 <!-- prettier-ignore -->
 {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
-<div class="alert alert-info mt-4" role="alert">
+<div class="alert alert-info mt-3" role="alert">
   <i class="far fa-edit"></i>
   {{ message }}
 </div>
@@ -16,7 +16,7 @@
 
 <!-- prettier-ignore -->
 {% if alert %}
-<div class="alert alert-warning mt-4" role="alert">
+<div class="alert alert-warning mt-3" role="alert">
   <i class="fas fa-exclamation-circle"></i>{{ alert }}
 </div>
 {% endif %}
@@ -25,7 +25,7 @@
 <hr />
 
 <form
-  class="mt-5"
+  class="mt-4"
   action="{{url_for('train_text')}}"
   method="POST"
   enctype="multipart/form-data"
@@ -48,21 +48,21 @@
     </div>
   </div>
 
-  <div class="form-row mt-4">
+  <div class="form-row mt-3">
     <div class="form-group col-6 mr-auto text-center">
-      <div class="my-3">Select a model</div>
+      <div class="my-2">Select a model</div>
       <div class="custom-control custom-radio custom-control-inline">
         <input
           type="radio"
           id="model1"
           name="modelname"
           class="custom-control-input"
-          value="mobilenetv2"
+          value="lstm"
           checked
         />
         <label class="custom-control-label" for="model1"
           ><h5>
-            <span class="badge badge-pill badge-info">Upgrade SA</span>
+            <span class="badge badge-pill badge-info">LSTM</span>
           </h5></label
         >
       </div>
@@ -72,17 +72,17 @@
           id="model2"
           name="modelname"
           class="custom-control-input"
-          value="resnet"
+          value="gru"
         />
         <label class="custom-control-label" for="model2"
           ><h5>
-            <span class="badge badge-pill badge-info">Faster SA</span>
+            <span class="badge badge-pill badge-info">GRU</span>
           </h5></label
         >
       </div>
     </div>
     <div class="form-group col-6 ml-auto text-center">
-      <div class="my-3">Select training-validation set ratio</div>
+      <div class="my-2">Select training-validation set ratio</div>
       <div class="custom-control custom-radio custom-control-inline">
         <input
           type="radio"
@@ -115,38 +115,136 @@
     </div>
   </div>
 
-  <div class="form-row mt-4">
-    <div class="col-1"></div>
-    <div class="form-group col-4 mr-auto text-center">
-      <div class="my-3">Batch Size</div>
+  <div class="form-row mt-3">
+    <div class="form-group col-6 mr-auto text-left">
+      <div class="my-2 text-center">Select a loss function</div>
+      <div class="custom-control custom-radio custom-control-inline ml-5">
+        <input
+          type="radio"
+          id="loss1"
+          name="lossfunction"
+          class="custom-control-input"
+          value="crossentropy"
+          checked
+        />
+        <label class="custom-control-label" for="loss1"
+          ><h5>
+            <span class="badge badge-pill badge-info">Cross Entropy</span>
+          </h5></label
+        >
+      </div>
+      <div class="custom-control custom-radio custom-control-inline ml-5">
+        <input
+          type="radio"
+          id="loss2"
+          name="lossfunction"
+          class="custom-control-input"
+          value="bce"
+        />
+        <label class="custom-control-label" for="loss2"
+          ><h5>
+            <span class="badge badge-pill badge-info"
+              >Binary Cross Entropy</span
+            >
+          </h5></label
+        >
+      </div>
+      <div class="custom-control custom-radio ml-5">
+        <input
+          type="radio"
+          id="loss3"
+          name="lossfunction"
+          class="custom-control-input"
+          value="mse"
+        />
+        <label class="custom-control-label" for="loss3"
+          ><h5>
+            <span class="badge badge-pill badge-info">Mean Squared</span>
+          </h5></label
+        >
+      </div>
+    </div>
+    <div class="form-group col-6 ml-auto text-center">
+      <div class="my-2">Select an optimizer</div>
+      <div class="custom-control custom-radio custom-control-inline">
+        <input
+          type="radio"
+          id="optim1"
+          name="optimizer"
+          class="custom-control-input"
+          value="sgd"
+          checked
+        />
+        <label class="custom-control-label" for="optim1"
+          ><h5>
+            <span class="badge badge-pill badge-info">SGD</span>
+          </h5></label
+        >
+      </div>
+      <div class="custom-control custom-radio custom-control-inline">
+        <input
+          type="radio"
+          id="optim2"
+          name="optimizer"
+          class="custom-control-input"
+          value="adam"
+        />
+        <label class="custom-control-label" for="optim2"
+          ><h5>
+            <span class="badge badge-pill badge-info">Adam</span>
+          </h5></label
+        >
+      </div>
+    </div>
+  </div>
+
+  <div class="form-row mt-3">
+    <!-- <div class="col-1"></div> -->
+    <div class="form-group col-3 mr-auto text-center">
+      <div class="my-2">Batch Size</div>
       <div>
         <input
           class="form-control shadow p-3 mb-5 bg-white rounded"
           name="batch_size"
           type="text"
           style="text-align: center"
-          pattern="^[1-9]$|^[1-9][0-9]$|^(128)$"
+          pattern="^[1-9]$|^[1-9][0-9]$|^[1-9][0-2][0-8]$"
           title="Batch size must be a number between 1 and 128."
           required
         />
       </div>
     </div>
-    <div class="col"></div>
-    <div class="form-group col-4 mr-auto text-center">
-      <div class="my-3">Epoch</div>
+    <div class="col-1"></div>
+    <div class="form-group col-3 mr-auto text-center">
+      <div class="my-2">Learning Rate</div>
+      <div>
+        <input
+          class="form-control shadow p-3 mb-5 bg-white rounded"
+          name="learning_rate"
+          type="text"
+          style="text-align: center"
+          pattern="0\.[0-9]{0,4}[1-9]|1(\.[0-9]+)*|2"
+          title="Learning rate must be a number between 0.00001 and 2. Only 5 digits after decimal is allowed."
+          required
+        />
+      </div>
+    </div>
+    <div class="col-1"></div>
+    <div class="form-group col-3 mr-auto text-center">
+      <div class="my-2">Epoch</div>
       <div>
         <input
           class="form-control shadow p-3 mb-5 bg-white rounded"
           name="epoch"
           type="text"
           style="text-align: center"
-          pattern="^[1-9]$|^[1-9][0-9]$|^(10)$"
+          pattern="^[1-9]$|^(10)$"
           title="Epoch must be a number between 1 and 10."
           required
         />
       </div>
     </div>
-    <div class="col-1"></div>
+    <!-- <div class="col-1"></div> -->
   </div>
 
   <div class="form-row">
@@ -167,12 +265,12 @@
     </div>
   </div>
   <div class="form-row">
-    <div class="form-group col-12 mt-5 text-center">
+    <div class="form-group col-12 mt-4 text-center">
       <button
         type="submit"
         class="btn btn-outline-primary"
-        href="#"
-        onclick="showDivLoad()"
+        href="text_training.html"
+        onclick="showDiv()"
       >
         Begin Training</button
       ><br /><br />
@@ -180,7 +278,7 @@
   </div>
   <div class="form-row">
     <div class="form-group col-12 text-center">
-      <div id="loadingID" style="display: none; padding-left: 10px">
+      <div id="loading" style="display: none; padding-left: 10px">
         <div class="spinner-grow text-info"></div>
         <div class="spinner-grow text-primary"></div>
         <div class="spinner-grow text-info"></div>

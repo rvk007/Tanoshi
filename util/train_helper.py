@@ -7,7 +7,7 @@ from datetime import datetime
 from flask import render_template, flash
 
 from util.s3_helper import store_to_s3, read_from_s3, put_on_s3
-
+from util.inference_helper import if_username_taken
 
 PREFIX = 'tanoshi'
 FORMAT = '%d-%m-%Y %H:%M:'
@@ -22,10 +22,8 @@ def allowed_file(filename):
 
 
 def if_training():
-    print("33")
     config_data = read_from_s3(config_filename)
-    print("11")
-    #config_data['status'] = 'sleeping'
+    config_data['status'] = 'sleeping'
     if config_data['status'] == 'active':
         return [' A model is training now. Please try again in sometime.', config_data]
     else:
@@ -33,59 +31,55 @@ def if_training():
 
 
 def training(request, train_file, task):
-    print("here", train_file)
     alert_message = if_training()
-    print(alert_message)
     if alert_message[0]:
-        print("in")
         return render_template(f'{train_file}.html', alert=alert_message[0])
     else:
-        print("1 ok ")
         username = request.form["user_name"]
         model_name = request.form["modelname"]
         ratio = request.form["ratio"]
-        # loss_function = request.form["lossfunction"]
-        # optimizer = request.form["optimizer"]
+        loss_function = request.form["lossfunction"]
+        optimizer = request.form["optimizer"]
         batch_size = request.form["batch_size"]
-        # learning_rate = request.form["learningrate"]
+        learning_rate = request.form["learning_rate"]
         epoch = request.form["epoch"]
         f = request.files['dataset_file']
 
         user_name = PREFIX + '-' + username + '-' + str(randint(0, 1000))
         # if username exists
+        while if_username_taken(user_name):
+            user_name = PREFIX + '-' + username + '-' + str(randint(0, 1000))
+
         f.filename = user_name + '-dataset.zip'
 
         if f and allowed_file(f.filename):
-            print("2")
             output = put_on_s3(f.filename)
-            print(output)
             if output[0]:
-                print("3")
                 # dump data into a json file and push it to s3 bucket
-                # data = {
-                #     'task': task,
-                #     'username': user_name,
-                #     'model': model_name,
-                #     'ratio': int(ratio),
-                #     'loss_function': loss_function,
-                #     'optimizer': optimizer,
-                #     'batchsize': batch_size,
-                #     'epochs': epoch,
-                #     'learning_rate': learning_rate,
-                #     'filename': f.filename,
-                #     'training': 'started'
-                # }
-
                 data = {
                     'task': task,
                     'username': user_name,
                     'model': model_name,
                     'ratio': int(ratio),
+                    'loss_function': loss_function,
+                    'optimizer': optimizer,
                     'batchsize': batch_size,
                     'epochs': epoch,
+                    'learning_rate': learning_rate,
                     'filename': f.filename,
                     'training': 'started'
                 }
+
+                # data = {
+                #     'task': task,
+                #     'username': user_name,
+                #     'model': model_name,
+                #     'ratio': int(ratio),
+                #     'batchsize': batch_size,
+                #     'epochs': epoch,
+                #     'filename': f.filename,
+                #     'training': 'started'
+                # }
 
                 filepath = user_name + '.txt'
                 with open(filepath, 'wb') as outfile:
@@ -101,7 +95,6 @@ def training(request, train_file, task):
                 # till here
                 # os.remove(filepath)
                 
-                print('4')
                 upload_message = (
                     '  Dataset is successfully uploaded and training is in progress.'
                     f' Username: " {user_name} ". Kindly save it for inferencing.'
