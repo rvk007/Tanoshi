@@ -1,44 +1,11 @@
-boto3 @ file:///tmp/build/80754af9/boto3_1603222673683/work
-botocore @ file:///tmp/build/80754af9/botocore_1603297996270/work
-brotlipy==0.7.0
-certifi==2020.12.5
-cffi @ file:///opt/concourse/worker/volumes/live/b9607b09-b777-4ff7-53dc-287727eb8574/volume/cffi_1600699191154/work
-chardet==4.0.0
-click==7.1.2
-cryptography @ file:///opt/concourse/worker/volumes/live/aeb63a26-659e-4edb-5405-74ba8e0c76f2/volume/cryptography_1601046839724/work
-docutils==0.15.2
-flake8 @ file:///tmp/build/80754af9/flake8_1601911421857/work
 Flask==1.1.2
-gunicorn==20.0.4
-idna @ file:///tmp/build/80754af9/idna_1593446292537/work
-importlib-metadata @ file:///tmp/build/80754af9/importlib-metadata_1602276842396/work
-itsdangerous==1.1.0
-Jinja2==2.11.2
-jmespath @ file:///tmp/build/80754af9/jmespath_1594304593830/work
-MarkupSafe @ file:///opt/concourse/worker/volumes/live/cb778296-98db-45ad-411e-6f726e102dc3/volume/markupsafe_1594371638608/work
-mccabe==0.6.1
-mkl-fft==1.2.0
-mkl-random==1.1.1
-mkl-service==2.3.0
-numpy @ file:///opt/concourse/worker/volumes/live/5572694e-967a-4c0c-52cf-b53d43e72de9/volume/numpy_and_numpy_base_1603491881791/work
-olefile==0.46
-Pillow @ file:///opt/concourse/worker/volumes/live/991b9a87-3372-4acd-45f9-eaa52701f03c/volume/pillow_1603822262543/work
-pycodestyle==2.6.0
-pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
-pyflakes==2.2.0
-pyOpenSSL @ file:///tmp/build/80754af9/pyopenssl_1594392929924/work
-PySocks @ file:///opt/concourse/worker/volumes/live/85a5b906-0e08-41d9-6f59-084cee4e9492/volume/pysocks_1594394636991/work
-python-dateutil==2.8.1
+boto3==1.16.43
 python-decouple==3.3
-requests==2.25.1
-s3transfer @ file:///opt/concourse/worker/volumes/live/31c45537-6259-49bc-5762-82231d9ec4b5/volume/s3transfer_1594419224140/work
-six @ file:///opt/concourse/worker/volumes/live/5b31cb27-1e37-4ca5-6e9f-86246eb206d2/volume/six_1605205320872/work
+torch==1.7.1
+torchvision==0.8.2
+gunicorn==20.0.4
+Pillow==8.0.1
 torch==1.7.1
 torchaudio==0.7.0a0+a853dff
 torchtext==0.3.1
 torchvision==0.8.2
-tqdm==4.55.1
-typing-extensions @ file:///tmp/build/80754af9/typing_extensions_1598376058250/work
-urllib3 @ file:///tmp/build/80754af9/urllib3_1603305693037/work
-Werkzeug==1.0.1
-zipp @ file:///tmp/build/80754af9/zipp_1604001098328/work
