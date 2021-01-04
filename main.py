@@ -1,6 +1,5 @@
 import os
-import PIL
-# from PIL import Image
+from PIL import Image
 from torchvision import transforms
 from flask import Flask, request, render_template, redirect, url_for, flash
 
@@ -110,8 +109,7 @@ def image_inference(user_name):
                 transforms.ToTensor(),
                 transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
             ])
-            print("PIL version ", PIL.__version__)
-            image_tensor = transformations(PIL.Image.open(destination)).unsqueeze(0)
+            image_tensor = transformations(Image.open(destination)).unsqueeze(0)
             output = image_classes[model[1](image_tensor).argmax().item()]
             print("image_path ", image_path)
             return render_template('image_inference.html', file_name=image_path, prediction=output)

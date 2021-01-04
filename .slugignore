@@ -1,0 +1,13 @@
+.prettierignore
+.env
+.venv
+__pycache__
+*.pyc
+.vscode
+trial.zip
+trial
+.DS_Store
+resnet34.pt
+config.pkl
+*.pt
+*.pkl
