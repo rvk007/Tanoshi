@@ -6,6 +6,8 @@
   }
 </script>
 
+{% include 'image_dataset.html' %}
+
 <!-- prettier-ignore -->
 {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
 <div class="alert alert-info mt-3" role="alert">
@@ -260,6 +262,11 @@
             in your dataset, upload 100 images of each and choose 70:30 ratio
             for better results.
           </p>
+          <a href="#" data-toggle="modal" data-target="#exampleModal">
+            <p style="font-size: small">
+              <i class="fas fa-info-circle"></i> Dataset demo
+            </p>
+          </a>
         </div>
       </div>
     </div>
