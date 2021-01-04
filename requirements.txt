@@ -5,7 +5,4 @@ torch==1.7.1
 torchvision==0.8.2
 gunicorn==20.0.4
 Pillow==8.0.1
-torch==1.7.1
-torchaudio==0.7.0a0+a853dff
 torchtext==0.3.1
-torchvision==0.8.2
