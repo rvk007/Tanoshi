@@ -1,9 +1,8 @@
-https://download.pytorch.org/whl/cpu/torch-1.0.1.post2-cp37-cp37m-linux_x86_64.whl
+-f https://download.pytorch.org/whl/torch_stable.html
 torchtext==0.3.1
-torchvision==0.8.2
+torch==1.7.1+cpu
+torchvision==0.8.2+cpu
 Flask==1.1.2
 boto3==1.16.0
 Pillow==8.1.0
 python-decouple==3.3
-gunicorn==20.0.4
-
