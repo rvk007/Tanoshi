@@ -6,10 +6,20 @@ from decouple import config
 
 
 PREFIX = 'training/'
+bucket = (
+        os.environ['AWS_BUCKET_NAME']
+        if 'AWS_BUCKET_NAME' in os.environ else config('AWS_BUCKET_NAME')
+    )
 s3 = boto3.client(
-    "s3",
-    aws_access_key_id=config('AWS_ACCESS_KEY'),
-    aws_secret_access_key=config('AWS_SECRET_ACCESS_KEY')
+    's3',
+    aws_access_key_id=(
+        os.environ['AWS_ACCESS_KEY']
+        if 'AWS_ACCESS_KEY' in os.environ else config('AWS_ACCESS_KEY')
+    ),
+    aws_secret_access_key=(
+        os.environ['AWS_SECRET_ACCESS_KEY']
+        if 'AWS_SECRET_ACCESS_KEY' in os.environ else config('AWS_SECRET_ACCESS_KEY')
+    )
 )
 
 
@@ -19,7 +29,7 @@ def store_to_s3(filename, data):
         pickle.dump(data, f)
         f.close()
     s3.upload_file(
-        Bucket=config("AWS_BUCKET_NAME"),
+        Bucket=bucket,
         Filename=filename,
         Key='config.pkl'
     )
@@ -29,7 +39,7 @@ def store_to_s3(filename, data):
 def read_from_s3(filename):
     """Read config"""
     s3.download_file(
-        Bucket=config("AWS_BUCKET_NAME"),
+        Bucket=bucket,
         Filename=filename,
         Key='config.pkl'
     )
@@ -51,7 +61,7 @@ def read_bucket():
 def put_on_s3(filename):
     """Put a file in a folder(PREFIX) present in s3 bucket on AWS"""
     try:
-        s3.put_object(Bucket=config("AWS_BUCKET_NAME"), Key=PREFIX + filename)
+        s3.put_object(Bucket=bucket, Key=PREFIX + filename)
         return [True, '']
 
     except Exception as e:
@@ -62,7 +72,7 @@ def put_on_s3(filename):
 def get_from_s3(username):
     """Get a file in a folder(PREFIX) present in s3 bucket on AWS"""
     try:
-        model_object = s3.get_object(Bucket=config("AWS_BUCKET_NAME"), Key=f'{PREFIX}{username}.pt')
+        model_object = s3.get_object(Bucket=bucket, Key=f'{PREFIX}{username}.pt')
         return [True, model_object]
 
     except Exception as e:
