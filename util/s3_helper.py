@@ -69,12 +69,22 @@ def put_on_s3(filename):
         return [False, e]
 
 
-def get_from_s3(username):
+def get_from_s3(filename):
     """Get a file in a folder(PREFIX) present in s3 bucket on AWS"""
     try:
-        model_object = s3.get_object(Bucket=bucket, Key=f'{PREFIX}{username}.pt')
+        print("here ", filename)
+        model_object = s3.get_object(Bucket=bucket, Key=PREFIX+filename)
         return [True, model_object]
 
     except Exception as e:
         # This is a catch all exception, edit this part to fit your needs.
         return [False, e]
+
+
+def download_from_s3(filename):
+    """Download files from s3"""
+    s3.download_file(
+        Bucket=bucket,
+        Key=PREFIX+filename,
+        Filename=filename
+    )

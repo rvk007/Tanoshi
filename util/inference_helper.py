@@ -4,7 +4,7 @@ import pickle
 import torchtext
 from torchvision.models import resnet
 
-from util.s3_helper import read_bucket, read_from_s3, get_from_s3
+from util.s3_helper import read_bucket, read_from_s3, download_from_s3
 from util.text_model import RNN
 
 
@@ -41,9 +41,9 @@ def username_found(username):
 
 def get_image_model(username):
     try:
-        model_path = f'{username}.pt'
+        # model_path = f'{username}.pt'
         model_path = 'resnet34.pt'
-        get_from_s3(username)
+        download_from_s3(model_path)
         model = torch.jit.load(model_path)
         return [True, model]
     except Exception as e:
@@ -71,6 +71,8 @@ def load_model(model_path, input_stoi):
 
 def get_text_model(sentence, model_path, metadata_path):
     try:
+        download_from_s3(model_path)
+        download_from_s3(metadata_path)
         input_stoi, label_itos = read_metadata(metadata_path)
         model = load_model(model_path, input_stoi)
         tokenized = [tok for tok in sentence.split()]

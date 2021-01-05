@@ -10,7 +10,6 @@ from util.s3_helper import store_to_s3
 
 
 username = ''
-PREFIX = '_tanoshi'
 task = 'image'
 app = Flask(__name__)
 app.secret_key = 'super secret key'
@@ -22,13 +21,13 @@ config_filename = 'config.pkl'
 
 @app.route('/')
 def home():
-    # data = {'status': 'sleeping',
-    #         'user_name': 'none',
-    #         'list_of_users': {'image': {},
-    #                           'text': {}
-    #                           }
-    #         }
-    # store_to_s3(config_filename, data)
+    data = {'status': 'sleeping',
+            'user_name': 'none',
+            'list_of_users': {'image': {},
+                              'text': {}
+                              }
+            }
+    store_to_s3(config_filename, data)
     return render_template('home.html')
 
 
@@ -44,11 +43,9 @@ def train_image():
 
 @app.route('/text_training.html', methods=['GET', 'POST'])
 def train_text():
-    print("1211")
     train_file = 'text_training'
     task = 'text'
     if request.method == 'POST':
-        print("222")
         return training(request=request, train_file=train_file, task=task)
     else:
         return render_template(f'{train_file}.html')
@@ -60,7 +57,6 @@ def inference():
         username = request.form['username']
         task = username_found(username)
         if task:
-            print("task ", task)
             return redirect(url_for(f'{task}_inference', user_name=username))
         else:
             flash(' Username is incorrect. Please enter a valid username.')
@@ -95,7 +91,6 @@ def image_inference(user_name):
         image_file = request.files['input_image']
         destination = os.path.join(app_root, 'static/images')
         for files in os.listdir(destination):
-            print("here", files)
             os.remove(os.path.join(destination, files))
 
         destination = '/'.join([destination, image_file.filename])
@@ -123,7 +118,6 @@ def image_inference(user_name):
 @app.route('/text_inference.html/<user_name>', methods=['GET', 'POST'])
 def text_inference(user_name):
     if request.method == 'POST':
-        print("Text")
         input_sentence = request.form['inputSentence']
         output = get_text_model(
             input_sentence,
