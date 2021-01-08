@@ -1,0 +1,47 @@
+{% extends 'index.html' %} {% block content %}
+<div class="text-center my-5 mx-auto">
+  <h1>Hi There!</h1>
+</div>
+<div class="row text-center mt-5">
+  <div class="col-sm-6">
+    <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 34rem">
+      <img
+        src="{{url_for('static', filename='image_classification.gif')}}"
+        class="card-img-top"
+        height="250vh"
+      />
+      <div class="card-body" style="text-align: center">
+        <h5 class="card-title">Object Recognition</h5>
+        <p class="card-text">
+          Finds an object in the input image and classify it to one of the
+          classes from the list of possible labels provided in a dataset!
+        </p>
+        <a href="image_training" class="btn btn-outline-primary mt-1"
+          >Let's Start</a
+        >
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 34rem">
+      <img
+        src="{{url_for('static', filename='sentiment_analysis.gif')}}"
+        class="card-img-top"
+        height="250vh"
+      />
+      <div class="card-body" style="text-align: center">
+        <h5 class="card-title">Sentiment Analysis</h5>
+
+        <p class="card-text">
+          Detects the emotion or sentiment of a text and classify them to
+          positive <i class="fas fa-smile"></i>, negative
+          <i class="fas fa-frown"></i> or neutral <i class="fas fa-meh"></i>!
+        </p>
+        <a href="text_training" class="btn btn-outline-primary mt-1"
+          >Let's Start</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <img
+      src="{{url_for('static', filename='logo.png')}}"
+      height="40rem"
+      width="40rem"
+      style="padding-right: 3px"
+    />
+    <a class="navbar-brand" style="width: 2rem" href="#">Tanoshi</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="."
+            >Overview <span class="sr-only">(current)</span></a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="inference">Inference</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Tour</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

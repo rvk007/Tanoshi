@@ -1,0 +1,65 @@
+{%extends 'index.html' %}{% block content%}
+
+<script>
+  function showDiv() {
+    document.getElementById('loading').style.display = 'block';
+  }
+</script>
+
+<!-- prettier-ignore -->
+{% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+<div class="alert alert-info mt-4" role="alert">
+  <i class="fas fa-skull-crossbones"></i>
+  {{ message }}
+</div>
+{% endfor %} {% endif%} {% endwith %}
+
+<h1 style="padding-top: 20px">Inference</h1>
+<hr />
+
+<form class="mt-5" action="#" method="POST" enctype="multipart/form-data">
+  <div class="form-group col-6 mx-auto">
+    <div class="input-group text-center">
+      <div class="input-group-prepend">
+        <span
+          for="validationDefaultUsername"
+          class="input-group-text"
+          id="inputUser"
+          >Username</span
+        >
+      </div>
+      <input
+        type="text"
+        aria-label="name"
+        name="username"
+        class="form-control"
+        id="validationDefaultUsername"
+        aria-describedby="inputUser"
+        required
+      />
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-12 mt-5 text-center">
+      <button
+        type="submit"
+        class="btn btn-outline-primary"
+        href="image_training"
+        onclick="showDiv()"
+      >
+        Begin Inference
+      </button>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-12 text-center">
+      <div id="loading" style="display: none; padding-left: 10px">
+        <div class="spinner-border m-5" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+{% if popup %} {% include 'popup_no_model.html' %} {% endif %} {% endblock %}
