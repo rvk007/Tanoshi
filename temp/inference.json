@@ -1,0 +1,35 @@
+{
+  "tanoshi-image-171": {
+    "task_type": "image",
+    "plot_path": "tanoshi-image-171_accuracy_change.jpg",
+    "correct_prediction": "tanoshi-image-171_correct_predictions.jpg",
+    "incorrect_prediction": "tanoshi-image-171_incorrect_predictions.jpg",
+    "model_path": "tanoshi-image-171_model.pt",
+    "classes": 11,
+    "accuracy": 61.9,
+    "created": "10-01-21 13:13"
+  },
+  "tanoshi-text-433": {
+    "task_type": "text",
+    "accuracy": 0.5,
+    "model_parametes": {
+      "model_name": "lstm",
+      "input_dim": 56,
+      "embedding_dim": 100,
+      "hidden_dim": 256,
+      "output_dim": 2,
+      "number_of_layers": 2,
+      "bidirectional": true,
+      "dropout": 0.5,
+      "pad_index": 1
+    },
+    "plot_path": "tanoshi-text-433_accuracy_change.jpg",
+    "model_path": "tanoshi-text-433_model.pt",
+    "tokenizer_path": "tanoshi-text-433_tokenizer.pkl",
+    "classes": {
+      "pos": 0,
+      "neg": 1
+    },
+    "created": "10-01-21 13:49"
+  }
+}
