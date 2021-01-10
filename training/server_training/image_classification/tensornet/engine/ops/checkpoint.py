@@ -25,7 +25,7 @@ class ModelCheckpoint:
         self.save_best_only = save_best_only
 
         # Set path for storing checkpoints
-        self.path = path
+        self.path = './data/checkpoints'
         if not os.path.exists(self.path):
             os.makedirs(self.path)
         if self.save_best_only:

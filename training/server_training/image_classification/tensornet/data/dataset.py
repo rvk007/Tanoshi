@@ -3,8 +3,8 @@ import numpy as np
 import torch
 import torchvision
 
-from tensornet.data.processing import Transformations, data_loader
-from tensornet.data.utils import unnormalize, normalize
+from .processing import Transformations, data_loader
+from .utils import unnormalize, normalize
 
 
 class Dataset:

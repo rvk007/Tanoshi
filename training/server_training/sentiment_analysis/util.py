@@ -1,7 +1,17 @@
+import os
 import torch
 import random
 import torch.nn as nn
 from torchtext import data
+import torchtext.vocab as vocab
+import matplotlib.pyplot as plt
+
+
+DATA = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    'data'
+)
+GLOVE = os.path.dirname(os.path.abspath(__file__))
 
 
 class RNN(nn.Module):
@@ -56,13 +66,13 @@ class RNN(nn.Module):
         return self.fc(hidden)
 
 
-def create_text_and_label(SEED, ratio):
-    TEXT = data.Field(tokenize='spacy', include_lengths=True)
-    LABEL = data.LabelField(dtype=torch.float)
+def create_text_and_label(SEED, ratio, filename):
+    TEXT = data.Field(sequential=True, tokenize='spacy', include_lengths=True)
+    LABEL = data.LabelField(tokenize='spacy', is_target=True, sequential=False)
     fields = [('text', TEXT), ('label', LABEL)]
     train_data = data.TabularDataset.splits(
                                             path='',
-                                            train='/content/dataset.csv',
+                                            train=filename,
                                             format='csv',
                                             fields=fields,
                                             skip_header=True
@@ -72,30 +82,26 @@ def create_text_and_label(SEED, ratio):
         ratio = 0.8
     else:
         ratio = 0.7
-    train_data, test_data = train_data.split(split_ratio=ratio, random_state=random.seed(5))
-    train_data, valid_data = train_data.split(random_state=random.seed(SEED))
+    train_data, valid_data = train_data.split(split_ratio=ratio, random_state=random.seed(SEED))
+    custom_embeddings = vocab.Vectors(name=os.path.join(GLOVE, 'glove.6B.100d.txt'))
+
     MAX_VOCAB_SIZE = 25000
 
     TEXT.build_vocab(
         train_data,
         max_size=MAX_VOCAB_SIZE,
-        vectors="glove.6B.50d",
+        vectors=custom_embeddings,
         unk_init=torch.Tensor.normal_
     )
 
     LABEL.build_vocab(train_data)
-    return TEXT, LABEL, train_data, valid_data, test_data
+    return TEXT, LABEL, train_data, valid_data
 
 
-def binary_accuracy(preds, y):
-    """
-    Returns accuracy per batch, i.e. if you get 8/10 right, this returns 0.8, NOT 8
-    """
-
+def calculate_accuracy(preds, y):
     # round predictions to the closest integer
-    rounded_preds = torch.round(torch.sigmoid(preds))
-    correct = (rounded_preds == y).float()
-    # convert into float for division 
+    _, predictions = torch.max(preds, 1)
+    correct = (predictions == y).float()
     acc = correct.sum() / len(correct)
     return acc
 
@@ -112,7 +118,7 @@ def train(model, iterator, optimizer, criterion):
         text, text_lengths = batch.text
         predictions = model(text, text_lengths.cpu()).squeeze(1)
         loss = criterion(predictions, batch.label)
-        acc = binary_accuracy(predictions, batch.label)
+        acc = calculate_accuracy(predictions, batch.label)
         loss.backward()
         optimizer.step()
         epoch_loss += loss.item()
@@ -129,7 +135,25 @@ def evaluate(model, iterator, criterion):
             text, text_lengths = batch.text
             predictions = model(text, text_lengths.cpu()).squeeze(1)
             loss = criterion(predictions, batch.label)
-            acc = binary_accuracy(predictions, batch.label)
+            acc = calculate_accuracy(predictions, batch.label)
             epoch_loss += loss.item()
             epoch_acc += acc.item()
     return epoch_loss / len(iterator), epoch_acc / len(iterator)
+
+
+def save_model_cpu(model, username):
+    model.load_state_dict(torch.load(f'{DATA}/checkpoints/{username}_best.pt'))
+    cpu_model = model.to('cpu')
+    torch.save(cpu_model.state_dict(), f'{DATA}/checkpoints/{username}_model.pt')
+
+
+def plot_accuracy(username, train, validation):
+    train = plt.plot(train, label='train')
+    validation = plt.plot(validation, label='validation')
+    plt.title('Accuracy Train vs Validation')
+
+    # Label axes
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.legend()
+    plt.savefig(f'{DATA}/{username}_accuracy_change.jpg')

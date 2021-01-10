@@ -2,9 +2,8 @@ import os
 import matplotlib.pyplot as plt
 
 
-def plot_metric(data, metric, legend_loc='lower right'):
+def plot_metric(data, metric, path, username, legend_loc='lower right'):
     """Plot accuracy graph or loss graph.
-
     Args:
         data (list or dict): If only single plot then this is a list, else
             for multiple plots this is a dict with keys containing.
@@ -47,12 +46,11 @@ def plot_metric(data, metric, legend_loc='lower right'):
         )
 
     # Save plot
-    fig.savefig(f'{"_".join(metric.split()).lower()}_change.png')
+    fig.savefig(f'{path}/{username}_{"_".join(metric.split()).lower()}_change.jpg')
 
 
 def plot_predictions(data, classes, plot_title, plot_path):
     """Display data.
-
     Args:
         data (list): List of images, model predictions and ground truths.
             Images should be numpy arrays.
@@ -63,13 +61,13 @@ def plot_predictions(data, classes, plot_title, plot_path):
 
     # Initialize plot
     row_count = -1
-    fig, axs = plt.subplots(2, 5, figsize=(15, 15))
+    fig, axs = plt.subplots(3, 5, figsize=(10, 10))
     fig.suptitle(plot_title)
 
     for idx, result in enumerate(data):
 
         # If 25 samples have been stored, break out of loop
-        if idx > 24:
+        if idx > 14:
             break
         
         label = result['label'].item()
@@ -84,14 +82,14 @@ def plot_predictions(data, classes, plot_title, plot_path):
     
     # Set spacing
     fig.tight_layout()
+    fig.subplots_adjust(top=0.88)
 
     # Save image
-    fig.savefig(f'{plot_path}')
+    fig.savefig(f'{plot_path}', bbox_inches='tight')
 
 
-def save_and_show_result(classes, correct_pred=None, incorrect_pred=None, path=None):
+def save_and_show_result(classes, username, correct_pred=None, incorrect_pred=None, path=None):
     """Display network predictions.
-
     Args:
         classes (list or tuple): List of classes in the dataset.
         correct_pred (list, optional): Contains correct model predictions and labels.
@@ -112,10 +110,10 @@ def save_and_show_result(classes, correct_pred=None, incorrect_pred=None, path=N
     
     if not correct_pred is None:  # Plot correct predicitons
         plot_predictions(
-            correct_pred, classes, 'Correct Predictions', f'{path}/correct_predictions.png'
+            correct_pred, classes, 'Correct Predictions', f'{path}/{username}_correct_predictions.jpg'
         )
 
     if not incorrect_pred is None:  # Plot incorrect predicitons
         plot_predictions(
-            incorrect_pred, classes, '\nIncorrect Predictions', f'{path}/incorrect_predictions.png'
+            incorrect_pred, classes, '\nIncorrect Predictions', f'{path}/{username}_incorrect_predictions.jpg'
         )

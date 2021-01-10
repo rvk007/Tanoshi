@@ -51,36 +51,14 @@ def rename_jpeg(path):
             os.rename(img_path, f'{os.path.splitext(img_path)[0]}.jpg')
 
 
-def remove_low_resolution_image(path):
-    """Remove images with resolution less than 150 * 150."""
-    for image in os.listdir(path):
-        img_path = os.path.join(path, image)
-        img = Image.open(img_path)
-        w, h = img.size
-        if w < 150 or h < 150:
-            os.remove(img_path)
-
-
 def clean_data(path):
     """Clean dataset images."""
 
     for data_dir in os.listdir(path):
-        print('Processing directory', data_dir)
         data_dir_path = os.path.join(path, data_dir)
-
-        print('Removing corrupt and non-image files...')
         remove_invalid_files(data_dir_path)
-
-        print('Converting PNG and grayscale images to RGB JPG format...')
         convert_to_rgb_jpg(data_dir_path)
-
-        print('Renaming .jpeg files to .jpg...')
         rename_jpeg(data_dir_path)
-
-        print('Removing images with resolution less than 150 * 150...')
-        remove_low_resolution_image(data_dir_path)
-
-        print('Done.\n')
 
 
 def split_data(src_path, target_path, split_value=0.7):

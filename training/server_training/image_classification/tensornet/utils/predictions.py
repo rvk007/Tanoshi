@@ -32,7 +32,7 @@ def class_level_accuracy(model, loader, device, classes):
         print('Accuracy of %5s : %2d %%' % (classes[i], 100 * class_correct[i] / class_total[i]))
 
 
-def get_predictions(model, loader, device, sample_count=25):
+def get_predictions(model, loader, device, sample_count=15):
     """Get correct and incorrect model predictions.
 
     Args:
@@ -40,7 +40,7 @@ def get_predictions(model, loader, device, sample_count=25):
         loader (torch.utils.data.DataLoader): Data Loader.
         device (str or torch.device): Device where data will be loaded.
         sample_count (int, optional): Total number of predictions to store from
-            each correct and incorrect samples. (default: 25)
+            each correct and incorrect samples. (default: 15)
     """
 
     correct_samples = []

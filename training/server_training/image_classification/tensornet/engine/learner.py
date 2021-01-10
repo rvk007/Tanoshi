@@ -3,11 +3,9 @@ import time
 import torch
 import torch.nn.functional as F
 
-from tensornet.engine.ops.regularizer import l1
-from tensornet.engine.ops.checkpoint import ModelCheckpoint
-from tensornet.engine.ops.tensorboard import TensorBoard
-from tensornet.data.processing import InfiniteDataLoader
-from tensornet.utils.progress_bar import ProgressBar
+from .ops.regularizer import l1
+from .ops.checkpoint import ModelCheckpoint
+from image_classification.tensornet.data.processing import InfiniteDataLoader
 
 
 class Learner:
@@ -96,8 +94,6 @@ class Learner:
                         )
                 else:
                     self.checkpoint = callback
-            elif isinstance(callback, TensorBoard):
-                self.summary_writer = callback
     
     def set_model(self, model):
         """Assign model to learner.
@@ -425,39 +421,26 @@ class Learner:
         """Run an epoch of model training."""
 
         self.model.train()
-        pbar = ProgressBar(target=len(self.train_loader), width=8)
         for batch_idx, data in enumerate(self.train_loader, 0):
             # Train a batch
             loss = self.train_batch(data)
-
-            # Update Progress Bar
-            pbar_values = self._get_pbar_values(loss)
-            pbar.update(batch_idx, values=pbar_values)
             
         # Update training history
         self.update_training_history(loss)
-        pbar_values = self._get_pbar_values(loss)
-        pbar.add(1, values=pbar_values)
 
     
     def train_iterations(self):
         """Train model for the 'self.epochs' number of batches."""
 
         self.model.train()
-        pbar = ProgressBar(target=self.epochs, width=8)
         iterator = InfiniteDataLoader(self.train_loader)
         for iteration in range(self.epochs):
             # Train a batch
             loss = self.train_batch(iterator.get_batch())
-
-            # Update Progress Bar
-            pbar_values = self._get_pbar_values(loss)
-            pbar.update(iteration, values=pbar_values)
             
             # Update training history
             self.update_training_history(loss)
         
-        pbar.add(1, values=pbar_values)
     
     def validate(self, verbose=True):
         """Validate an epoch of model training.

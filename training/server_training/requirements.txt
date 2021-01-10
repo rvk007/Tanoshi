@@ -1,0 +1,8 @@
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz
+numpy==1.18.5
+torch==1.7.1
+torchvision==0.8.2
+Pillow==7.1.0
+albumentations==0.4.5
+spacy==2.2.4
+scikit-image

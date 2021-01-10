@@ -1,8 +1,7 @@
 import torch
 import torch.nn as nn
 
-from .utils.summary import summary as model_summary
-from tensornet.engine.learner import Learner
+from image_classification.tensornet.engine.learner import Learner
 
 
 class BaseModel(nn.Module):
@@ -22,14 +21,6 @@ class BaseModel(nn.Module):
             Model output.
         """
         raise NotImplementedError
-
-    def summary(self, input_size):
-        """Generates model summary.
-
-        Args:
-            input_size (tuple): Size of input to the model.
-        """
-        model_summary(self, input_size)
     
     def create_learner(
         self, train_loader, optimizer, criterion, device='cpu',
