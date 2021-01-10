@@ -7,7 +7,11 @@ __pycache__
 trial.zip
 trial
 .DS_Store
-resnet34.pt
+*.pt
 config.pkl
 *.pt
 *.pkl
+credentials.py
+__MACOSX/
+glove.6B.100d.txt
+.vector_cache/
