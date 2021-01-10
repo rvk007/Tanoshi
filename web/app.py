@@ -3,31 +3,38 @@ from PIL import Image
 from torchvision import transforms
 from flask import Flask, request, render_template, redirect, url_for, flash
 
-from image_class import image_classes
+# from image_class import image_classes
 from util.train_helper import training
-from util.inference_helper import username_found, get_image_model, get_text_model, inference_cache
-from util.s3_helper import store_to_s3
+from util.inference_helper import username_information, get_image_model, get_text_model, inference_cache, download_inference_files, get_inference_data, not_exists
+from util.s3_helper import put_object
 
 
 username = ''
+image_classes = []
 task = 'image'
 app = Flask(__name__)
 app.secret_key = 'super secret key'
 app_root = os.path.dirname(os.path.abspath(__file__))
-app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024
 
-config_filename = 'config.pkl'
+if task == 'image':
+    app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024
+else:
+    app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
+
+STATUS_CONFIG = 'status.json'
+INFERENCE_CONFIG = 'inference.json'
 
 
 @app.route('/')
 def home():
-    # data = {'status': 'sleeping',
-    #         'user_name': 'none',
-    #         'list_of_users': {'image': {},
-    #                           'text': {}
-    #                           }
-    #         }
-    #store_to_s3(config_filename, data)
+    # data = {
+    #     "status": "sleeping",
+    #     "username": "",
+    #     "dev_mode": False
+    # }
+    # put_object(STATUS_CONFIG, data)
+    # inf = {}
+    # put_object(INFERENCE_CONFIG, inf)
     return render_template('home.html')
 
 
@@ -55,9 +62,15 @@ def train_text():
 def inference():
     if request.method == 'POST':
         username = request.form['username']
-        task = username_found(username)
-        if task:
-            return redirect(url_for(f'{task}_inference', user_name=username))
+        task = username_information(username)
+        if task[0]:
+            if not_exists(username)
+                download_inference_files(username)
+            return redirect(
+                url_for(
+                    f'{task[1]}_inference', user_name=username
+                )
+            )
         else:
             flash(' Username is incorrect. Please enter a valid username.')
             return render_template('inference.html')
@@ -69,20 +82,30 @@ def inference():
 def tour():
     return render_template('tour.html')
 
+
 @app.route('/image_inference/<user_name>', methods=['GET', 'POST'])
 def image_inference(user_name):
+
+    config_data = get_inference_data(user_name)
+    image_classes = config_data['classes']
+    accuracy = config_data['accuracy']
+    
     if request.method == 'POST':
+        image_classes = config_data['classes']
+        accuracy = config_data['accuracy']
+
         image_file = request.files['input_image']
         destination = os.path.join(app_root, 'static/images')
-        print(destination)
+
         for files in os.listdir(destination):
             os.remove(os.path.join(destination, files))
-
         destination = '/'.join([destination, image_file.filename])
         image_file.save(destination)
         image_path = '/'.join(['/static/images', image_file.filename])
+
         inf_exist = inference_cache(user_name, app_root)
         model = get_image_model(user_name, inf_exist)
+
         if model[0]:
             transformations = transforms.Compose([
                 transforms.Resize(224),
@@ -91,39 +114,59 @@ def image_inference(user_name):
                 transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
             ])
             image_tensor = transformations(Image.open(destination)).unsqueeze(0)
-            output = image_classes[model[1](image_tensor).argmax().item()]
-            print("image_path ", image_path)
-            return render_template('image_inference.html', file_name=image_path, prediction=output)
+            idx = model[1](image_tensor).argmax().item()
+            output = image_classes[str(idx)]
+
+            return render_template(
+                'image_inference.html', file_name=image_path, prediction=output,
+                plot=user_name+'_accuracy_change.jpg',
+                correct=user_name+'_correct_predictions.jpg',
+                incorrect=user_name+'_incorrect_predictions.jpg',
+                accuracy=accuracy
+            )
         else:
             flash(f'An error has occured: {model[1]}')
             return render_template('image_inference.html')
     else:
-        return render_template('image_inference.html')
+        return render_template(
+            'image_inference.html',
+            plot=user_name+'_accuracy_change.jpg',
+            correct=user_name+'_correct_predictions.jpg',
+            incorrect=user_name+'_incorrect_predictions.jpg',
+            accuracy=accuracy
+        )
 
 
 @app.route('/text_inference/<user_name>', methods=['GET', 'POST'])
 def text_inference(user_name):
+
+    config_data = get_inference_data(user_name)
+    accuracy = config_data['accuracy']*100
+
     if request.method == 'POST':
+    
         input_sentence = request.form['inputSentence']
         inf_exist = inference_cache(user_name, app_root)
+
         output = get_text_model(
+            user_name,
             input_sentence,
-            'upgraded_sentiment_analysis.pt',
-            'upgraded_sentiment_analysis_metadata.pkl',
             inf_exist
         )
         if output[0]:
-            pred = ''
-            if output[1] == 'neg':
-                pred = 'Negative'
-            elif output[1] == 'pos':
-                pred = 'Positive'
-            return render_template('text_inference.html', input_Sentence=input_sentence, prediction=pred)
+            return render_template(
+                'text_inference.html', input_Sentence=input_sentence, 
+                prediction=output[1], plot=user_name+'_accuracy_change.jpg', accuracy=accuracy
+        )
         else:
             flash(f'An error has occured: {output[1]}')
             return render_template('text_inference.html')
     else:
-        return render_template('text_inference.html')
+        return render_template(
+            'text_inference.html',
+            plot=user_name+'_accuracy_change.jpg',
+            accuracy=accuracy
+        )
 
 
 @app.errorhandler(413)

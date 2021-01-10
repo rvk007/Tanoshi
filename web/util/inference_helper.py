@@ -3,56 +3,37 @@ import os
 import torch
 import pickle
 import torchtext
+import spacy
 from torchvision.models import resnet
 
-from util.s3_helper import read_bucket, read_from_s3, download_from_s3
+from util.s3_helper import read_bucket, fetch_json, download_from_s3, download_file
 from util.text_model import RNN
 
 
-config_filename = 'config.pkl'
+INFERENCE_PATH = 'inference.json'
+INFERENCE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def inference_cache(username, path):
     for files in os.listdir(path):
-        if files == 'resnet34'+'.pt':
+        if files == f'{username}.pt':
             return False
     return True
 
 
-def in_bucket(filename):
-    list_of_files = read_bucket()
-    if filename in list_of_files:
-        return True
+def username_information(username):
+    config_data = fetch_json(INFERENCE_PATH)
+    task = ''
+    if username in config_data:
+        task = config_data[username]['task_type']
+        return [True, task]
     else:
-        return False
-
-
-def if_username_taken(username):
-    config_data = read_from_s3(config_filename)
-    if username in config_data['list_of_users']['image'].keys():
-        return True
-    elif username in config_data['list_of_users']['text'].keys():
-        return True
-    else:
-        return False
-
-
-def username_found(username):
-    config_data = read_from_s3(config_filename)
-    if username in config_data['list_of_users']['image'].keys():
-        return 'image'
-    elif username in config_data['list_of_users']['text'].keys():
-        return 'text'
-    else:
-        return False
-
+        return [False, '']
+  
 
 def get_image_model(username, doesnt_exist):
     try:
-        # model_path = f'{username}.pt'
-        model_path = 'resnet34.pt'
-        if doesnt_exist:
-            download_from_s3(model_path)
+        model_path = f'{INFERENCE}/static/{username}_model.pt'
         model = torch.jit.load(model_path)
         return [True, model]
     except Exception as e:
@@ -60,38 +41,70 @@ def get_image_model(username, doesnt_exist):
         return [False, e]
 
 
-def read_metadata(metadata_path):
-    with open(metadata_path, 'rb') as f:
-        metadata = pickle.load(f)
-        input_stoi = metadata['input_stoi']
-        label_itos = metadata['label_itos']
-    return input_stoi, label_itos
-
-
-def load_model(model_path, input_stoi):
+def load_model(model_path, model_parametes):
     model = RNN(
-        len(set(input_stoi.values())), 100, 256, 1, 
-        2, True, 0.5, input_stoi['<pad>']
+        model_parametes['input_dim'],
+        model_parametes['embedding_dim'],
+        model_parametes['hidden_dim'],
+        model_parametes['output_dim'],
+        model_parametes['number_of_layers'],
+        model_parametes['bidirectional'],
+        model_parametes['dropout'],
+        model_parametes['pad_index'],
+        model_parametes['model_name']
     )
     model.load_state_dict(torch.load(model_path))
     model = model.eval()
     return model
 
 
-def get_text_model(sentence, model_path, metadata_path, doesnt_exist):
+def get_text_model(username, sentence, doesnt_exist):
     try:
-        if doesnt_exist:
-            download_from_s3(model_path)
-            download_from_s3(metadata_path)
-        input_stoi, label_itos = read_metadata(metadata_path)
-        model = load_model(model_path, input_stoi)
-        tokenized = [tok for tok in sentence.split()]
-        indexed = [input_stoi[t] for t in tokenized]
+        inference_data = fetch_json(INFERENCE_PATH)[username]
+        model = load_model(f'{INFERENCE}/static/{inference_data["model_path"]}', inference_data['model_parametes'])
+        tokenizer_file = open(f'{INFERENCE}/static/{inference_data["tokenizer_path"]}', 'rb')
+        tokenizer = pickle.load(tokenizer_file)
+        token = spacy.load('en')
+        tokenized = [tok.text for tok in token.tokenizer(sentence)]
+        indexed = [tokenizer[t] for t in tokenized]
+        length = [len(indexed)]
         tensor = torch.LongTensor(indexed)
         tensor = tensor.unsqueeze(1)
-        length_tensor = torch.LongTensor([len(indexed)])
-        prediction = torch.sigmoid(model(tensor, length_tensor))
-
-        return [True, label_itos[round(prediction.item())]]
+        length_tensor = torch.LongTensor(length)
+        prediction = model(tensor, length_tensor)
+        _, prediction = torch.max(prediction, 1)
+        classes = inference_data['classes']
+        return [True, classes[str(prediction.item())]]
     except Exception as e:
         return [False, e]
+
+
+def download_inference_files(user_name):
+    config_data = get_inference_data(user_name)
+    task = config_data['task_type']
+    files = [
+        config_data['plot_path'], config_data['model_path']
+    ]
+    if task == 'image':
+        files += [
+            config_data['correct_prediction'],
+            config_data['incorrect_prediction']
+        ]
+    else:
+        files += [config_data['tokenizer_path']]
+    for f in files:
+        download_file(path=f'inference/{f}', target_path=f'{INFERENCE}/static/{f}')
+
+    return config_data['classes'], config_data['accuracy']
+
+
+def get_inference_data(user_name):
+    config_data = fetch_json(INFERENCE_PATH)[user_name]
+    return config_data
+
+
+def not_exists(username):
+    if os.path.exists(f'{INFERENCE_PATH}/static/{username}_model.pt'):
+        return False
+    return True
+    

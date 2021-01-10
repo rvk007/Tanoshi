@@ -1,0 +1,48 @@
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog mw-100 w-75">
+    <div class="modal-content" style="padding-left: 10vh; padding-right: 10vh;">
+      <div>
+        <h2 class="mt-3 text-center">Dataset Format</h2>
+        <br/>
+        <h6>
+          The dataset should be a <mark>.csv</mark> file and the
+          input sentences and their corresponding labels should be placed as shown in the figure below.
+        </h6>
+        <p>
+          The dataset should not be more than <b>200 MB</b>.
+          <br/><br/>
+          <h5 style="display:inline;">Allowed file extension: <h2 style="display:inline;"><mark>.csv</mark></h2> <b> (comma-separated values)</b></h5>
+          <br/><br/>
+          <b>Points to note:</b>
+          <ul>
+            <li>
+                The file should have a minimum of 100 and maximum of 1000 rows.
+            </li>
+            <li>
+                You can provide as many number of classes to be classified, but make sure for per class you have 
+                atleast 100 corresponding imput sentences.
+            </li>
+          </ul> 
+        </p>
+        <div class="text-center">
+            <img
+          src="{{url_for('static', filename='information/sentiment_analysis.png')}}"
+          class="card-img-top"
+          style="width: 45vw;"
+        />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

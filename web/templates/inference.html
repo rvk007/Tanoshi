@@ -14,12 +14,20 @@
 </div>
 {% endfor %} {% endif%} {% endwith %}
 
-<h1 style="padding-top: 20px">Inference</h1>
+<h4 style="padding-top: 20px">Run inference on your model</h4>
 <hr />
 
-<form class="mt-5" action="#" method="POST" enctype="multipart/form-data">
-  <div class="form-group col-6 mx-auto">
-    <div class="input-group text-center">
+<div class="form-group col-12 mx-auto text-center">
+  <img
+    src="{{url_for('static', filename='information/inference.gif')}}"
+    class="card-img-top text-center"
+    style="width: 35vw"
+  />
+</div>
+
+<form class="mt-4" action="#" method="POST" enctype="multipart/form-data">
+  <div class="form-group col-6 mx-auto text-center">
+    <div class="input-group mt-5">
       <div class="input-group-prepend">
         <span
           for="validationDefaultUsername"
@@ -40,7 +48,7 @@
     </div>
   </div>
   <div class="form-row">
-    <div class="form-group col-12 mt-5 text-center">
+    <div class="form-group col-12 mt-2 text-center">
       <button
         type="submit"
         class="btn btn-outline-primary"

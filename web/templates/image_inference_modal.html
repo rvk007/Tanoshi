@@ -1,0 +1,52 @@
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog mw-100 w-75">
+    <div class="modal-content" style="padding-left: 10vh; padding-right: 15vh">
+      <div>
+        <h4 class="mt-4" style="text-align: center">Training Results!</h4>
+        <div class="row text-center">
+          <div class="col-3">
+            <img
+              src="{{url_for('static', filename=correct)}}"
+              class="d-block"
+              style="width: 23vw"
+              alt="correct"
+            />
+          </div>
+          <div class="col-1"></div>
+          <div class="col-3" style="padding-left: 2vw">
+            <img
+              src="{{url_for('static', filename=plot)}}"
+              class="d-block"
+              style="width: 21vw"
+              alt="plot"
+            />
+          </div>
+          <div class="col-1"></div>
+          <div class="col-3">
+            <img
+              src="{{url_for('static', filename=incorrect)}}"
+              class="d-block"
+              style="width: 23vw"
+              alt="incorrect"
+            />
+          </div>
+        </div>
+        <div class="text-center">
+          <h4>Accuracy: <b>{{accuracy}}%</b></h4>
+        </div>
+        <br />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
