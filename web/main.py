@@ -64,7 +64,7 @@ def inference():
         username = request.form['username']
         task = username_information(username)
         if task[0]:
-            if not_exists(username)
+            if not_exists(username):
                 download_inference_files(username)
             return redirect(
                 url_for(
