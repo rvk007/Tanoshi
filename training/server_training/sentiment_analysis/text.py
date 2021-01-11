@@ -113,9 +113,17 @@ def train_sentiment_analysis(
     for (k, v) in classes.items():
         classify[v] = k
 
+    stoi = {}
+    for k, v in TEXT.vocab.stoi.items():
+        if (k != TEXT.unk_token and v != UNK_IDX) or (k == TEXT.unk_token):
+            stoi[k] = v
+
     inference = {
         'task_type': 'text',
         'accuracy': float(valid_acc),
+        'input_stoi': stoi,
+        'label_itos': LABEL.vocab.stoi,
+        'unk_idx': UNK_IDX,
         'model_parametes': {
             'model_name': model_name,
             'input_dim': INPUT_DIM,
@@ -132,5 +140,6 @@ def train_sentiment_analysis(
         'tokenizer_path': f'{username}_tokenizer.pkl',
         'classes': classify
     }
+
     return inference
     

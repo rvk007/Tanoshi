@@ -9,7 +9,7 @@ from random import randint
 from datetime import datetime
 from flask import render_template, flash
 
-from util.s3_helper import store_to_s3, read_from_s3, put_on_s3, fetch_json, put_object, upload_file
+from util.s3_helper import fetch_json, put_object, upload_file
 from util.inference_helper import username_information
 
 PREFIX = 'tanoshi'
@@ -19,7 +19,6 @@ destination = os.path.dirname(os.path.abspath(__file__))
 
 def if_training():
     config_data = fetch_json(CONFIG_PATH)
-    config_data['status'] = 'sleeping' # to del
     if config_data['status'] == 'active':
         return ' A model is training now. Please try again in sometime.'
     else:

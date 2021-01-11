@@ -6,7 +6,7 @@ import torchtext
 import spacy
 from torchvision.models import resnet
 
-from util.s3_helper import read_bucket, fetch_json, download_from_s3, download_file
+from util.s3_helper import fetch_json, download_file
 from util.text_model import RNN
 
 
