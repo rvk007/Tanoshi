@@ -4,4 +4,4 @@
 </div>
 
 ![progress badge](https://img.shields.io/badge/status-Version%201.0-blue)
-[![Website](https://img.shields.io/badge/Website-green.svg)](https://tanoshi.herokuapp.com/)
+[![Website](https://img.shields.io/badge/Website-orange.svg)](https://tanoshi.herokuapp.com/)
