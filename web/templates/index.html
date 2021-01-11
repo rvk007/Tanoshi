@@ -2,16 +2,26 @@
 <html>
   <head>
     <!-- Bootstrap CDN -->
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="{{url_for('static', filename='information/logo.png')}}"
+    />
     {% include 'base/css.html' %} {% block css %}{% endblock %}
     <title>Tanoshi</title>
   </head>
 
   <body>
-    {% include 'base/navbar.html' %}
-
-    <div class="container" style="max-width: 970px">
-      {% block content %}{% endblock %}
+    <div id="particles-js"></div>
+    <div class="page-container">
+      <div class="content-wrap">
+        {% include 'base/navbar.html' %}
+        <div class="container">{% block content %}{% endblock %}</div>
+      </div>
+      {% include 'base/footer.html' %}
     </div>
-    {% include 'base/js.html' %} {% block script %}{% endblock %}
+    {% include 'base/js.html' %}
+    <!--prettier-ignore-->
+    {% block script %}{% endblock %}
   </body>
 </html>

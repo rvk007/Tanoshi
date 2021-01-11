@@ -1,6 +1,18 @@
 {% extends 'index.html' %} {% block content %}
-<div class="text-center my-5 mx-auto">
-  <h1>Hi There!</h1>
+<div class="text-center mt-3 mx-auto">
+  <img
+    src="{{url_for('static', filename='information/logo.png')}}"
+    class="card-img-top"
+    style="width: 5vw"
+  />
+  <h1 style="font-size: 6vh">T A N O S H I</h1>
+  <p style="font-size: 3vh">
+    Build your first machine learning model in ten minutes. No code or
+    experience required.
+  </p>
+  <p class="mt-5" style="font-size: 2vh">
+    You can train the below two machine learning models with Tanoshi.
+  </p>
 </div>
 <div class="card-deck row text-center mt-5">
   <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 34rem">
@@ -10,7 +22,7 @@
       height="250vh"
     />
     <div class="card-body" style="text-align: center">
-      <h5 class="card-title">Object Recognition</h5>
+      <h5 class="card-title">Image Classification</h5>
       <p class="card-text">
         Finds an object in the input image and classify it to one of the classes
         from the list of possible labels provided in a dataset!

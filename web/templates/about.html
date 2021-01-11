@@ -1,0 +1,30 @@
+{% extends 'index.html' %}{% block content%}
+<div class="mt-3">
+  <h1 class="text-center" style="font-size: 5vh">About Tanoshi</h1>
+  <p class="text-center" style="font-size: 2vh">
+    This is a platform where you can upload your own custom dataset, set model
+    parameters and train your own deep learning model without writing any line
+    of code.
+  </p>
+  <p style="font-size: x-large">
+    <i class="fas fa-cogs"></i>
+    Process of training
+  </p>
+  <img
+    src="{{url_for('static', filename='information/train.png')}}"
+    style="width: 130vh"
+  />
+  <br />
+  <br />
+  <br />
+  <p style="font-size: x-large">
+    <i class="fas fa-cogs"></i>
+    Process of inference
+  </p>
+  <img
+    src="{{url_for('static', filename='information/inference.png')}}"
+    style="width: 130vh"
+  />
+</div>
+
+{% endblock %}

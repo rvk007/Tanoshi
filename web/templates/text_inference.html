@@ -15,74 +15,72 @@
 <h4 class="mt-2" style="padding-top: 20px">Sentiment Analysis Inference</h4>
 <hr />
 
-<div>
-  <form class="mt-2" action="#" method="POST" enctype="multipart/form-data">
-    <div class="col-12">
-      <div class="mx-auto">
-        <img
-          src="{{url_for('static', filename=plot)}}"
-          class="d-block"
-          style="height: 40vh"
-          alt="plot"
-        />
-        <h4 style="text-align: center">
-          The accuracy of your model: <b>{{accuracy}}%</b>
-        </h4>
-      </div>
-    </div>
-    <div
-      class="row"
-      style="padding-left: 50px; padding-top: 30px; padding-right: 50px"
-    >
-      <div class="col-sm-6">
-        <div class="my-3">
-          <span class="badge badge-pill badge-info"
-            ><h7>Input Sentence</h7></span
-          >
-        </div>
-        <textarea
-          class="form-control shadow p-3 mb-5 bg-white rounded"
-          name="inputSentence"
-          type="text"
-          id="information"
-          rows="6"
-          placeholder="Enter content here"
-        >
-{{ input_Sentence }}</textarea
-        >
-      </div>
-      {% if prediction %}
-      <div class="col-sm-6">
-        <div class="my-3">
-          <span class="badge badge-pill badge-info"><h7>Prediction</h7></span>
-        </div>
-        <label
-          class="form-control shadow p-6 mb-5 bg-white rounded"
-          id="output"
-          rows="2"
-          placeholder=""
-          style="text-align: center; outline-color: blue; width: 25rem"
-          >{{ prediction }}</label
-        >
-      </div>
-      {% endif %}
-    </div>
-    <br /><br />
-    <div style="padding-left: 230px">
-      <button
-        type="submit"
-        href="#"
-        class="btn btn-outline-primary"
-        onclick="showDiv()"
-      >
-        Classify Sentence
-      </button>
-      <div id="loading" style="display: none; padding-left: 10px">
-        <div class="spinner-border m-5" role="status">
-          <span class="sr-only">Loading...</span>
-        </div>
-      </div>
-    </div>
-  </form>
+<div class="row mb-2">
+  <div class="col-8 mx-auto">
+    <img
+      src="{{url_for('static', filename=plot)}}"
+      class="d-block"
+      style="height: 40vh"
+      alt="plot"
+    />
+    <h4 class="text-center mt-2">
+      The accuracy of your model: <b>{{accuracy}}%</b>
+    </h4>
+  </div>
 </div>
+<form class="mt-2" action="#" method="POST" enctype="multipart/form-data">
+  <div
+    class="row"
+    style="padding-left: 50px; padding-top: 30px; padding-right: 50px"
+  >
+    <div class="col-sm-6">
+      <div class="my-3">
+        <span class="badge badge-pill badge-info"><h7>Input Sentence</h7></span>
+      </div>
+      <textarea
+        class="form-control shadow p-3 mb-5 bg-white rounded"
+        name="inputSentence"
+        type="text"
+        id="information"
+        rows="6"
+        placeholder="Enter content here"
+      >
+          {{ input_Sentence }}
+        </textarea
+      >
+    </div>
+    {% if prediction %}
+    <div class="col-sm-6">
+      <div class="my-3">
+        <span class="badge badge-pill badge-info"><h7>Prediction</h7></span>
+      </div>
+      <label
+        class="form-control shadow p-6 mb-5 bg-white rounded"
+        id="output"
+        rows="2"
+        placeholder=""
+        style="text-align: center; outline-color: blue; width: 25rem"
+        >{{ prediction }}</label
+      >
+    </div>
+    {% endif %}
+  </div>
+  <br /><br />
+  <div style="padding-left: 230px">
+    <button
+      type="submit"
+      href="#"
+      class="btn btn-outline-primary"
+      onclick="showDiv()"
+    >
+      Classify Sentence
+    </button>
+    <div id="loading" style="display: none; padding-left: 10px">
+      <div class="spinner-border m-5" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+  </div>
+</form>
+
 {% if popup %} {% include 'popup.html' %} {% endif %} {% endblock %}

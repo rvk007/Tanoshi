@@ -17,11 +17,14 @@
 <h4 style="padding-top: 20px">Run inference on your model</h4>
 <hr />
 
-<div class="form-group col-12 mx-auto text-center">
+<div
+  class="card shadow p-3 mb-5 bg-white rounded mx-auto text-center"
+  style="width: 34rem"
+>
   <img
     src="{{url_for('static', filename='information/inference.gif')}}"
     class="card-img-top text-center"
-    style="width: 35vw"
+    style="width: 30vw"
   />
 </div>
 
@@ -66,6 +69,30 @@
           <span class="sr-only">Loading...</span>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-12 text-center">
+      <h4>Username: tanoshi-meera-985</h4>
+      <p>
+        The above username can be used to witness a demo of image classification
+        inference.
+      </p>
+      <p>
+        The dataset on which it is trained is a smaller version of tinyimagenet
+        and it contains 10 classes as mentioned below, with 105 images each.
+      </p>
+      <br />
+      <button type="button" class="btn btn-dark">crocodile</button>
+      <button type="button" class="btn btn-dark">crab</button>
+      <button type="button" class="btn btn-dark">penguin</button>
+      <button type="button" class="btn btn-dark">jellyfish</button>
+      <button type="button" class="btn btn-dark">duck</button>
+      <button type="button" class="btn btn-dark">sloth</button>
+      <button type="button" class="btn btn-dark">poodle</button>
+      <button type="button" class="btn btn-dark">fish</button>
+      <button type="button" class="btn btn-dark">seal</button>
+      <button type="button" class="btn btn-dark">spider</button>
     </div>
   </div>
 </form>
