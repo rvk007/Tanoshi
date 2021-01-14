@@ -24,7 +24,7 @@ After validating the model parameters an input dataset file a user token is crea
 In this process an algorithm takes an image as input and tells you what is there in that image, much like what is shown below.
 
 <div align="center">
-  <img src="web/static/information/image_classification.gif" height="180px" />
+  <img src="web/static/information/image_classification.gif" height="220px" />
 </div>
 
 It provides two models **Resnet34** and **MobileNetV2** which are pretrained on Imagenet dataset you can use either of them. Create a custom dataset which follows the below mentioned description and you can start training.
@@ -54,7 +54,7 @@ There are three major components of this project:
 - AWS Lambda
 
 <div align="center">
-  <img src="images/flowchart.png" height="270px" />
+  <img src="images/flowchart.png" height="330px" />
 </div>
 
 You can go to the above links to know more about this project in detail.
