@@ -28,7 +28,7 @@ There are three major components of this project:
 - AWS Lambda
 
 <div align="center">
-  <img src="images/flowchart.png" height="330px" />
+  <img src="images/flowchart.png" height="350px" />
 </div>
 
 You can go to the above links to know more about this project in detail.
