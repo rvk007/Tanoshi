@@ -145,7 +145,13 @@ def train_image_classification(
     with zipfile.ZipFile(dataset_filename, 'r') as zip_ref:
         zip_ref.extractall('./data/')
 
-    os.rename(os.path.join(DATA, 'dataset'), os.path.join(DATA, username))
+    dataset = ''
+    possible_dir = ['__MACOSX', 'checkpoints']
+    for f in os.listdir('./data/'):
+        if f not in possible_dir and f.split('.')[0] != username:
+            dataset = f
+
+    os.rename(os.path.join(DATA, dataset), os.path.join(DATA, username))
     filename = os.path.join(DATA, username)
     number_of_classes, classes = create_image_class(username, filename)
     inference['classes'] = classes

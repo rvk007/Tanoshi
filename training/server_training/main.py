@@ -94,7 +94,6 @@ def main(username):
             batch_size, learning_rate, epochs, dataset_filename
         )
 
-    print(inference_data)
     # Upload data to S3
     upload_model_data(task, username)
 
@@ -104,7 +103,6 @@ def main(username):
     inference_config[username]['created'] = datetime.now().strftime('%d-%m-%y %H:%M')
     put_object(INFERENCE_CONFIG, inference_config)
 
-    print(inference_config)
     # Delete data
     shutil.rmtree(DATA_PATH)
 

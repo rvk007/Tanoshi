@@ -78,6 +78,9 @@ def plot_predictions(data, classes, plot_title, plot_path):
             row_count += 1
         axs[row_count][idx % 5].axis('off')
         axs[row_count][idx % 5].set_title(f'Label: {classes[label]}\nPrediction: {classes[prediction]}')
+        
+        if (result['image']).shape[0] in [3, 4]:
+            result['image'] = result['image'].permute(1, 2, 0)
         axs[row_count][idx % 5].imshow(result['image'])
     
     # Set spacing
