@@ -19,29 +19,23 @@ It has a feature to create a custom model by setting model parameters such as:
 
 After validating the model parameters an input dataset file a user token is created and training starts, which takes around five-ten minutes. Once training is completed the user can use that token to test their model.
 
-## Code Structure
-
 There are three major components of this project:
 
 - Heroku
 - EC2 instance
 - AWS Lambda
 
+[Go to the above links to know more about this project in detail.]
+
+The below image explains the work of each component and how they are related to each other:
+
 <div align="center">
   <img src="images/flowchart.png" height="350px" />
 </div>
 
-You can go to the above links to know more about this project in detail.
-
 ## Image Classification
 
-In this process an algorithm takes an image as input and tells you what is there in that image, much like what is shown below.
-
-<div align="center">
-  <img src="web/static/information/image_classification.gif" height="180px" />
-</div>
-
-It provides two models **Resnet34** and **MobileNetV2** which are pretrained on Imagenet dataset you can use either of them. Create a custom dataset which follows the below mentioned description and you can start training.
+Image classification, as the name suggests, ia an algorithm which predicts the content of an image. This project provides two different models, **Resnet34** and **MobileNetV2** which are pretrained on Imagenet dataset, to classify an image. Use the below format while creating the dataset and make sure to **zip** it before uploading else it won't be accepted.
 
 <div align="center">
   <img src="images/image_dataset.png" height="220px" />
@@ -49,11 +43,7 @@ It provides two models **Resnet34** and **MobileNetV2** which are pretrained on 
 
 ## Sentiment Analysis
 
-<div align="center">
-  <img src="web/static/information/sentiment_analysis.gif" height="150px" />
-</div>
-
-You can create a custom dataset and train using either **LSTM** or **GRU** from scratch. Allowed dataset format is shown below.
+Sentiment Analysis is a type of text classification, where a text is classified as **Positive** and **Negative**. Although, in this project Sentiment analysis is trained from scratch so it can be used for any kind text classification. Again, use the below specified format to create your dataset. The file should be a **csv** file.
 
 <div align="center">
   <img src="images/text_dataset.png" height="200px" />
