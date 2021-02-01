@@ -1,50 +1,113 @@
-<div align="center">
-  <img src="web/static/information/logo.png" height="100px" />
-  <h1 class="custom-inline">Tanoshi</h1>
-</div>
+# Server Training
 
-![progress badge](https://img.shields.io/badge/status-version%201.0-blue)
-[![Website](https://img.shields.io/badge/Website-orange.svg)](https://tanoshi.herokuapp.com/)
+A t3.2xlarge CPU instance was used to train the models.b The code in this folder is placed on the previously mentioned CPU instance.
 
-This is an end-to-end platform where you can upload your own custom dataset, set model parameters and train your own deep learning model without writing any line of code.
+## Code Structure
 
-Tanoshi currently provides Image classification and Sentiment Analysis machine learning models.
-It has a feature to create a custom model by setting model parameters such as:
+### image_classification
 
-- Batch size
-- Optimizer
-- Learning rate
-- Number of epochs
-- Training-Validation ratio
+- **[tensornet](image_classification/tensornet)**: A pytorch library for computer vision applications
+- **[image.py](image_classification/image.py)**: Provides functionality to train image classification model using custom hyperparameters, provided by the user. Save model checkpoints and training results in data/ folder.
 
-After validating the model parameters an input dataset file a user token is created and training starts, which takes around five-ten minutes. Once training is completed the user can use that token to test their model.
+### Sentiment Analysis
 
-There are three major components of this project:
+- **[text.py](sentiment_analysis/text.py)**: Provides functionality to train sentiment analysis model using custom hyperparameters, provided by the user. Save model checkpoints and training results in data/ folder.
+- **[util.py](sentiment_analysis/util.py)**:
+  - Defines RNN class for sentiment analysis
+  - A helper file for text.py.
+- It also contains pretrained word vector **glove.6B.100d.txt** file for word embeddings (not uploaded on github, added in .gitignore). This file can be dowloaded from [here](https://nlp.stanford.edu/projects/glove/).
 
-- Heroku
-- EC2 instance
-- AWS Lambda
+### Others
 
-[Go to the above links to know more about this project in detail.]
+- **[main.py](main.py)**:
 
-The below image explains the work of each component and how they are related to each other:
+  - Create data/ and data/checkpoints folder
+  - Fetch training parameters from json file present in s3 bucket
+  - Download dataset from s3 bucket and place in 'data' folder
+  - Start training
+  - Upload checkpoints,training results and inference.json file on s3 bucket
+  - Delete data/ folder
 
-<div align="center">
-  <img src="images/flowchart.png" height="350px" />
-</div>
+- **[s3](S3.py)**
 
-## Image Classification
+  - Update a json and place in a s3 bucket,
+  - Download and upload a file to s3 bucket.
+  - Delete a file from s3 bucket
 
-Image classification, as the name suggests, ia an algorithm which predicts the content of an image. This project provides two different models, **Resnet34** and **MobileNetV2** which are pretrained on Imagenet dataset, to classify an image. Use the below format while creating the dataset and make sure to **zip** it before uploading else it won't be accepted.
+- **[credentials-sample.py](credentials-sample.py)**: Rename this file to credentials and provide your aws details for the bucket name.
 
-<div align="center">
-  <img src="images/image_dataset.png" height="220px" />
-</div>
+### Json File
 
-## Sentiment Analysis
+**inference.json**: A sample inference.json file is placed [here](Tanoshi/temp/inference.json) for reference.
 
-Sentiment Analysis is a type of text classification, where a text is classified as **Positive** and **Negative**. Although, in this project Sentiment analysis is trained from scratch so it can be used for any kind text classification. Again, use the below specified format to create your dataset. The file should be a **csv** file.
+**Image Clasiification**
 
-<div align="center">
-  <img src="images/text_dataset.png" height="200px" />
-</div>
+```yaml
+  'tanoshi-image-171':
+    {
+      'task_type': 'image',
+      'plot_path': 'tanoshi-image-171_accuracy_change.jpg',
+      'correct_prediction': 'tanoshi-image-171_correct_predictions.jpg',
+      'incorrect_prediction': 'tanoshi-image-171_incorrect_predictions.jpg',
+      'model_path': 'tanoshi-image-171_model.pt',
+      'classes': { '0': 'jellyfish', '1': 'duck' },
+      'accuracy': 83.33,
+      'created': '14-01-21 09:05',
+    },
+```
+
+- **tanoshi-image-171**: username
+- **task_type**: Name of the task, wether it is **text** or **image**
+- **plot_path**: Name of the image which contains plot of accuracy change
+- **correct_prediction**: Name of the image which contains 5x5 images **correctly** predicted
+- **incorrect_prediction**: Name of the image which contains 5x5 images **incorrectly** predicted
+- **model_path**: Name of the model checkpoint file
+- **classes**: Dictionary which contains name of each class given in the dataset
+- **accuracy**: Accuracy achieved by the model
+- **created**: Date and time once the training is finished
+
+**Sentiment Analysis**
+
+```yaml
+'tanoshi-text-433':
+  {
+    'task_type': 'text',
+    'accuracy': 78.33,
+    'model_parametes':
+      {
+        'model_name': 'lstm',
+        'input_dim': 56,
+        'embedding_dim': 100,
+        'hidden_dim': 256,
+        'output_dim': 2,
+        'number_of_layers': 2,
+        'bidirectional': true,
+        'dropout': 0.5,
+        'pad_index': 1,
+      },
+    'plot_path': 'tanoshi-text-433_accuracy_change.jpg',
+    'model_path': 'tanoshi-text-433_model.pt',
+    'tokenizer_path': 'tanoshi-text-433_tokenizer.pkl',
+    'classes': { 'pos': 0, 'neg': 1 },
+    'created': '10-01-21 13:49',
+  }
+```
+
+- **tanoshi-text-433**: username
+- **task_type**: Name of the task, wether it is **text** or **image**
+- **accuracy**: Accuracy achieved by the model
+- **model_parametes**: Dictionary containing training hyperparameters
+- **model_name**: Name of the task, wether it is **lstm** or **gru**
+- **input_dim**: Input dimension for the model
+- **embedding_dim**: Embedding dimension of the word embedding
+- **hidden_dim**: Hidden Dimension of the model
+- **output_dim**: Output Dimension of the model, number of classes
+- **number_of_layers**: Number of layers used in forming the model
+- **bidirectional**: Wether model is bidirectional or not, **true** or **false**
+- **dropout**: Value of Dropout regularization
+- **pad_index**: Word embedding index of pad
+- **plot_path**: Name of the image which contains plot of accuracy change
+- **model_path**: Name of the model checkpoint file
+- **tokenizer_path**: Name of the file containg word tokenizer used in inference
+- **classes**: Dictionary which contains name of each class given in the dataset
+- **created**: Date and time once the training is finished

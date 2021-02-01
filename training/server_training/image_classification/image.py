@@ -155,7 +155,6 @@ def train_image_classification(
     filename = os.path.join(DATA, username)
     number_of_classes, classes = create_image_class(username, filename)
     inference['classes'] = classes
-    print(classes)
     clean_data(filename)
 
     if ratio == 8:
