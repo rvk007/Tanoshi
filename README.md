@@ -21,9 +21,9 @@ After validating the model parameters an input dataset file a user token is crea
 
 There are three major components of this project:
 
-- Heroku
-- EC2 instance
-- AWS Lambda
+- [Heroku](web)
+- [EC2 instance](training/server_training)
+- [AWS Lambda](training/lambda)
 
 [Go to the above links to know more about this project in detail.]
 
