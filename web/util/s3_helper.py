@@ -2,7 +2,6 @@ import os
 import json
 import boto3
 import credentials
-# from decouple import config
 
 # Names
 BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME', credentials.AWS_BUCKET_NAME)
@@ -52,4 +51,3 @@ def upload_file(source_path, target_path):
 
 def delete_object(path):
     S3_RESOURCE.Object(BUCKET_NAME, path).delete()
-
