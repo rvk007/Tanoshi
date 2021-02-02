@@ -43,4 +43,4 @@ This folder contains python files which provides the following functionality:
 
 In heroku as well we can store the values we have listed in credentials.py. To access those value use os.environ[<KEY_NAME>].
 
-Go [here](../data_json/README.md) to know about json files.
+Go [here](../../data_json/README.md) to know about json files.
