@@ -17,4 +17,4 @@ Steps to install serverless can be found [here](https://www.serverless.com/frame
 
 - [s3.py](s3.py): When the ec2 instance is stopped, update the "status" value to **sleeping** in status.json and upload it back to s3 bucket.
 
-Go [here](../../data_json/README.md) to know about json files.
+Go [here](../data_json/README.md) to know about json files.

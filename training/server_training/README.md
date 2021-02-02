@@ -36,4 +36,4 @@ A t3.2xlarge CPU instance was used to train the models.b The code in this folder
 
 - **[credentials-sample.py](credentials-sample.py)**: Rename this file to credentials and provide your aws details for the bucket name.
 
-Go [here](../../data_json/README.md) to know about json files.
+Go [here](../data_json/README.md) to know about json files.
