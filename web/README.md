@@ -37,24 +37,10 @@ This folder contains python files which provides the following functionality:
 
 - **[app](app.py)**: This files helps application to route between html pages, checks the size of the dataset provided and saves inference information.
 
-- **[credentials-copy](credentials-copy.py)**: Rename this file to credentials and provide your aws details for the bucket name, access key and secret access key.
+- **[credentials-sample](credentials-sample.py)**: Rename this file to credentials and provide your aws details for the bucket name, access key and secret access key.
 
 - **[Procfile](Procfile)**: Heroku was for deploying the code present in the web folder. 'app.py' is the file name mentioned in the Procfile from which UI of the application starts.
 
 In heroku as well we can store the values we have listed in credentials.py. To access those value use os.environ[<KEY_NAME>].
 
-### Json File
-
-**status.json**: A sample status.json file is placed [here](Tanoshi/temp/status.json) for reference.
-
-```yaml{
-{
-  "status": "sleeping",
-  "username": "",
-  "dev_mode": false
-}
-```
-
-- **status**: Status of the EC2 instance **active** when training, else **sleeping**
-- **username**: If training name of the username else blank **""**
-- **dev_mode**: When testing is happeing **true**, else **false**. If it is 'true' EC2 instance won't started by lambda functions.
+Go [here](../../data_json/README.md) to know about json files.

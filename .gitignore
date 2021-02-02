@@ -15,3 +15,4 @@ credentials.py
 __MACOSX/
 glove.6B.100d.txt
 .vector_cache/
+training/lambda/credentials.yml
