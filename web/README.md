@@ -35,12 +35,12 @@ This folder contains python files which provides the following functionality:
 
 ### Others
 
-- **[app](app.py)**: This files helps application to route between html pages, checks the size of the dataset provided and saves inference information.
+- **[app.py](app.py)**: This files helps application to route between html pages, checks the size of the dataset provided and saves inference information.
 
-- **[credentials-sample](credentials-sample.py)**: Rename this file to credentials and provide your aws details for the bucket name, access key and secret access key.
+- **[credentials-sample.py](credentials-sample.py)**: Rename this file to credentials and provide your aws details for the bucket name, access key and secret access key.
 
 - **[Procfile](Procfile)**: Heroku was for deploying the code present in the web folder. 'app.py' is the file name mentioned in the Procfile from which UI of the application starts.
 
 In heroku as well we can store the values we have listed in credentials.py. To access those value use os.environ[<KEY_NAME>].
 
-Go [here](../../data_json/README.md) to know about json files.
+Go [here](../data_json/README.md) to know about json files.
