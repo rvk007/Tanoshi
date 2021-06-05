@@ -54,7 +54,7 @@ def model_train(
         model.classifier[1] = torch.nn.Linear(1280, classes)
 
     model = model.to(device)
-
+    print(" Getting ready to train the model ")
     # Create train data loader
     train_loader = dataset.loader(train=True)
 
@@ -72,6 +72,7 @@ def model_train(
     checkpoint = ModelCheckpoint('checkpoints', monitor='val_accuracy', verbose=1)
 
     # Setup Reduce LR on Plateau
+    print(" Training started ")
     if is_reducelrscheduler == 'on':
         scheduler = reduce_lr_on_plateau(
             optimizer, patience=patience, verbose=True, min_lr=min_lr, factor=factor
@@ -87,6 +88,9 @@ def model_train(
             device=device, epochs=epochs, val_loader=val_loader,
             callbacks=[checkpoint], metrics=['accuracy']
         )
+    
+    print("Training completed! ")
+
     return model, dataset, val_loader
 
 
@@ -109,6 +113,8 @@ def model_result(model, username, val_loader, device, dataset):
         incorrect_predictions[idx]['image'] = dataset.unnormalize(
             incorrect_predictions[idx]['image'], transpose=True
         )
+
+    for idx in range(len(correct_predictions)):
         correct_predictions[idx]['image'] = dataset.unnormalize(
             correct_predictions[idx]['image'], transpose=True
         )
@@ -145,6 +151,8 @@ def train_image_classification(
     with zipfile.ZipFile(dataset_filename, 'r') as zip_ref:
         zip_ref.extractall('./data/')
 
+    print(" Extracted image data ")
+
     dataset = ''
     possible_dir = ['__MACOSX', 'checkpoints']
     for f in os.listdir('./data/'):
@@ -163,6 +171,8 @@ def train_image_classification(
         ratio = 0.7
     split_data(filename, os.path.join(DATA, 'split_data'), split_value=ratio)
 
+    print(" Dataset created ")
+
     # Initialize CUDA and set random seed
     cuda, device = initialize_cuda(1)
 
@@ -178,4 +188,7 @@ def train_image_classification(
     # Save results
     validation_accuracy = model_result(model, username, val_loader, device, dataset)
     inference['accuracy'] = validation_accuracy
+
+    print(" Returning from image classification")
+    
     return inference

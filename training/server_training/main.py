@@ -64,7 +64,10 @@ def get_config_data(userdata_filename):
 
 
 def main(username):
+    print(" In server training ")
     os.makedirs(os.path.join(DATA_PATH, 'checkpoints'))
+
+    print("Created /data/checkpoints folders")
 
     # # Download user file
     userdata_filename = os.path.join(DATA_PATH, f'{username}.json')
@@ -82,6 +85,7 @@ def main(username):
         os.path.join(DATA_PATH, dataset_filename),
     )
 
+    print(" Completed fetching data from s3 ")
     inference_data = {}
     if task == 'image':
         inference_data = train_image_classification(
@@ -96,19 +100,23 @@ def main(username):
 
     # Upload data to S3
     upload_model_data(task, username)
+    print('Uploaded inference data to s3')
 
     # Update inference json
     inference_config = fetch_json(INFERENCE_CONFIG)
     inference_config[username] = inference_data
     inference_config[username]['created'] = datetime.now().strftime('%d-%m-%y %H:%M')
     put_object(INFERENCE_CONFIG, inference_config)
-
-    # Delete data
-    shutil.rmtree(DATA_PATH)
+    print("Added user information to inference.json and uploaded to s3")
 
     # Delete train data from S3
     delete_object(os.path.join(TRAINING_CONFIG, dataset_filename))
     delete_object(os.path.join(TRAINING_CONFIG, f'{username}.json'))
+    print("Deleted user data from training folder in s3")
+
+    # Delete data
+    shutil.rmtree(DATA_PATH)
+    print("Deleted data folder")
 
 
 if __name__ == '__main__':

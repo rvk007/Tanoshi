@@ -42,7 +42,7 @@ def train_sentiment_analysis(
         sort_within_batch=True,
         device=device)
         
-    print('iterator done')
+    print('Text iterator created')
     with open(f'./data/{username}_tokenizer.pkl', 'wb') as tokens:
         pickle.dump(TEXT.vocab.stoi, tokens)
     
@@ -74,6 +74,8 @@ def train_sentiment_analysis(
 
     criterion = nn.CrossEntropyLoss()
 
+    print('Getting ready for training')
+
     if is_reducelrscheduler == 'on':
         scheduler = ReduceLROnPlateau(
             optimizer, factor=factor, patience=patience, verbose=False, min_lr=min_lr
@@ -89,7 +91,7 @@ def train_sentiment_analysis(
     train_accuracy = []
     valid_accuracy = []
 
-    print('training started!')
+    print('Training started ')
     for epoch in range(N_EPOCHS):
         train_loss, train_acc = train(model, train_iterator, optimizer, criterion)
         valid_loss, valid_acc = evaluate(model, valid_iterator, criterion)
@@ -103,10 +105,14 @@ def train_sentiment_analysis(
         if valid_loss < best_valid_loss:
             best_valid_loss = valid_loss
             torch.save(model.state_dict(), f'{DATA}/checkpoints/{username}_best.pt')
-        print('loss acc:', valid_loss, " ", valid_acc)
+
+        print(f'Epoch:{epoch}')
+        print(f' Train Loss: {train_loss} Train accuracy: {train_acc}')
+        print(f' Validation Loss: {valid_loss} Validation accuracy: {valid_acc}')
 
     save_model_cpu(model, username)
     plot_accuracy(username, train_accuracy, valid_accuracy)
+    print('Trained model and images saved')
 
     classes = LABEL.vocab.stoi
     classify = {}
@@ -140,6 +146,8 @@ def train_sentiment_analysis(
         'tokenizer_path': f'{username}_tokenizer.pkl',
         'classes': classify
     }
+
+    print(" Returning from text classification")
 
     return inference
     
