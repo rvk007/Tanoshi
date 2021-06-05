@@ -9,6 +9,8 @@ from PIL import Image
 def remove_invalid_files(path):
     """Remove corrupt and non-image files"""
     for file in os.listdir(path):
+        if file[0] == '.': # Mac os by default adds a file .DS_Store, we don't need to prcess this file
+            continue
         img_path = os.path.join(path, file)
         if os.path.splitext(file)[-1].lower() in ['.jpg', '.jpeg', '.png']:
             try:  # corrupt image
@@ -22,6 +24,8 @@ def remove_invalid_files(path):
 def convert_to_rgb_jpg(path):
     """Convert PNG and grayscale images to RGB JPG format."""
     for img in os.listdir(path):
+        if img[0] == '.': # Mac os by default adds a file .DS_Store, we don't need to prcess this file
+            continue
         image = os.path.join(path, img)
         if image.lower().endswith('.png'):
             img = Image.open(image)
@@ -46,6 +50,8 @@ def convert_to_rgb_jpg(path):
 def rename_jpeg(path):
     """Rename .jpeg files to .jpg"""
     for file in os.listdir(path):
+        if file[0] == '.': # Mac os by default adds a file .DS_Store, we don't need to prcess this file
+            continue
         if os.path.splitext(file)[-1] in ['.JPG', '.JPEG', '.jpeg']:
             img_path = os.path.join(path, file)
             os.rename(img_path, f'{os.path.splitext(img_path)[0]}.jpg')
@@ -55,6 +61,8 @@ def clean_data(path):
     """Clean dataset images."""
 
     for data_dir in os.listdir(path):
+        if data_dir[0] == '.': # Mac os by default adds a file .DS_Store, we don't need to prcess this file
+            continue
         data_dir_path = os.path.join(path, data_dir)
         remove_invalid_files(data_dir_path)
         convert_to_rgb_jpg(data_dir_path)
@@ -70,6 +78,8 @@ def split_data(src_path, target_path, split_value=0.7):
     os.makedirs(os.path.join(target_path, 'test'))
 
     for data_dir in os.listdir(src_path):
+        if data_dir[0] == '.': # Mac os by default adds a file .DS_Store, we don't need to prcess this file
+            continue
         # Directory paths
         src_data_dir = os.path.join(src_path, data_dir)
         target_train_dir = os.path.join(target_path, 'train', data_dir)
