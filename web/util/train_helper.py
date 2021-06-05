@@ -91,7 +91,7 @@ def training(request, train_file, task):
                 render_template(f'{train_file}.html', alert=alert_message)
 
             number_of_labels = len(set(df.iloc[:, 1].values))
-            if number_of_labels==1:
+            if number_of_labels == 1:
                 alert_message = (
                     f'The dataset has only one class. Atleast two class is required to perform clasiification.')
                 render_template(f'{train_file}.html', alert=alert_message)
