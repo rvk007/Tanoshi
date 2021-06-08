@@ -7,7 +7,7 @@ import zipfile
 import pandas as pd
 from random import randint
 from datetime import datetime
-from flask import render_template, flash
+from flask import render_template, flash, session
 
 from util.s3_helper import fetch_json, put_object, upload_file
 from util.inference_helper import username_information
@@ -146,6 +146,12 @@ def training(request, train_file, task):
                 'Kindly save the username for inference.'
             )
             flash(upload_message)
+            # print(upload_message)
+
+            # server_active = "The training is completed! Please proceed to perform inference on your model."
+            # if config_data['status'] == 'sleeping':
+            #     flash(server_active)
+            #     print(server_active)
 
             # Update inference json: lambda
             config_data = fetch_json(CONFIG_PATH)

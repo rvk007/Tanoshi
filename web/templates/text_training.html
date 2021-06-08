@@ -14,6 +14,7 @@
   <p><i class="fas fa-exclamation-circle"></i>{{ alert }}</p>
 </div>
 {% endif %}
+
 <h1 style="padding-top: 30px; text-align: center; color: #230">
   TEXT CLASSIFICATION
 </h1>
@@ -308,7 +309,7 @@
     </div>
   </div>
 </form>
-{% if popup %} {% include 'popup_training.html' %} {% endif %} {% endblock %}
+{% endblock %}
 
 <!-- prettier-ignore -->
 {% block script %}

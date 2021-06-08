@@ -48,3 +48,13 @@ Sentiment Analysis is a type of text classification, where a text is classified 
 <div align="center">
   <img src="images/text_dataset.png" height="200px" />
 </div>
+
+## Commands to access AWS EC2 instance
+
+```
+# Connect to EC2 instance
+ssh -i .ssh/<pem_file> ubuntu@<public_dns>
+
+# Copy files from local machine to EC2 instance
+scp -i .ssh/<pem_file> -r <path_of_the_folder> ubuntu@<public_dns>:/home/ubuntu/
+```
