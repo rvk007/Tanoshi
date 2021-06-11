@@ -29,10 +29,23 @@
   >
     Training results
   </button>
+  <br />
+  <br />
+  <a href="{{url_for('static', filename=model_path)}}" download>
+    <button type="button" class="btn btn-primary">
+      Download your trained model!
+    </button>
+  </a>
 </div>
 
 <div>
-  <form class="mt-1" action="#" method="POST" enctype="multipart/form-data">
+  <form
+    class="mt-1"
+    action="#"
+    style="padding-top: 30px"
+    method="POST"
+    enctype="multipart/form-data"
+  >
     <label class="form-check-label" for="exampleCheck1">Select an image</label
     ><br />
     <input

@@ -28,12 +28,20 @@
     </h4>
   </div>
 </div>
+
 <form class="mt-2" action="#" method="POST" enctype="multipart/form-data">
   <div
     class="row"
     style="padding-left: 50px; padding-top: 30px; padding-right: 50px"
   >
     <div class="col-sm-6">
+      <a href="{{url_for('static', filename=model_path)}}" download>
+        <button type="button" class="btn btn-primary">
+          Download your trained model!
+        </button>
+      </a>
+      <br />
+      <br />
       <div class="my-3">
         <span class="badge badge-pill badge-info"><h7>Input Sentence</h7></span>
       </div>

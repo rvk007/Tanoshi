@@ -122,7 +122,8 @@ def image_inference(user_name):
                 plot=user_name+'_accuracy_change.jpg',
                 correct=user_name+'_correct_predictions.jpg',
                 incorrect=user_name+'_incorrect_predictions.jpg',
-                accuracy=accuracy
+                accuracy=accuracy,
+                model_path=user_name+'_model.pt'
             )
         else:
             flash(f'An error has occured: {model[1]}')
@@ -133,7 +134,8 @@ def image_inference(user_name):
             plot=user_name+'_accuracy_change.jpg',
             correct=user_name+'_correct_predictions.jpg',
             incorrect=user_name+'_incorrect_predictions.jpg',
-            accuracy=accuracy
+            accuracy=accuracy,
+            model_path=user_name+'_model.pt'
         )
 
 
@@ -165,7 +167,8 @@ def text_inference(user_name):
         return render_template(
             'text_inference.html',
             plot=user_name+'_accuracy_change.jpg',
-            accuracy=accuracy
+            accuracy=accuracy,
+            model_path=user_name+'_model.pt'
         )
 
 
