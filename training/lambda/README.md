@@ -1,5 +1,7 @@
 # AWS Lambda
 
+This code is deployed in AWS S3 bucket.
+
 ## Lambda Functions
 
 There are two purpose of the lambda functions:

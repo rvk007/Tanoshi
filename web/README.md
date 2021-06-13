@@ -2,6 +2,12 @@
 
 The application is built on Flask.
 
+To run:
+```
+cd Tanoshi/web
+python -m flask run
+```
+
 ## Code Structure
 
 - Static
@@ -10,7 +16,9 @@ The application is built on Flask.
 
 ### Static
 
-This folder contains css and js files and stores all the images shown in the project.
+- This folder contains css and js files and stores all the images shown in the project. 
+- After training all the inference files are downloaded to this folder.
+
 
 ### Templates
 
@@ -43,4 +51,6 @@ This folder contains python files which provides the following functionality:
 
 In heroku as well we can store the values we have listed in credentials.py. To access those value use os.environ[<KEY_NAME>].
 
-Go [here](../data_json/README.md) to know about json files.
+To know about content of json files go [here](../data_json/README.md).  
+
+To use trained model for image classification go [here](https://github.com/rvk007/Tanoshi/blob/986350622707028447238d180a1d564749c463d3/web/app.py#L86) and for text classification go [here](https://github.com/rvk007/Tanoshi/blob/986350622707028447238d180a1d564749c463d3/web/app.py#L142).  

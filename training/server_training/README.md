@@ -2,6 +2,23 @@
 
 A t3.2xlarge CPU instance was used to train the models.b The code in this folder is placed on the previously mentioned CPU instance.
 
+To run:
+
+Connect to EC2 instance:
+```  
+ssh -i .ssh/<pem_file> ubuntu@<public_dns>
+```
+
+Copy sever_training folder from your local machine to EC2 instance:  
+```
+scp -i .ssh/<pem_file> -r <path_of_the_folder> ubuntu@<public_dns>:/home/ubuntu/
+```
+To run the training directly on the EC2 machine through terminal, but for this training data should be available in s3 bucket:
+```
+cd server_training  
+python main.py
+```
+
 ## Code Structure
 
 ### image_classification
