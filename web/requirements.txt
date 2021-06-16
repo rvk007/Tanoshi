@@ -1,5 +1,4 @@
 -f https://download.pytorch.org/whl/torch_stable.html
-en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz
 torchtext==0.3.1
 torch==1.7.1+cpu
 torchvision==0.8.2+cpu
@@ -8,5 +7,6 @@ boto3==1.16.0
 Pillow==8.1.0
 python-decouple==3.3
 gunicorn==20.0.4
-spacy==2.2.4
 pandas
+spacy>=2.2.0,<3.0.0
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0/en_core_web_sm-2.2.0.tar.gz#egg=en_core_web_sm

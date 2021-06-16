@@ -1,21 +1,20 @@
 import os
 import json
 import boto3
-import credentials
 
 # Names
-BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME', credentials.AWS_BUCKET_NAME)
+BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME')
 
 # S3 Connection
 S3_CLIENT = boto3.client(
     's3',
-    aws_access_key_id=os.environ.get('AWS_ACCESS_KEY', credentials.AWS_ACCESS_KEY),
-    aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY', credentials.AWS_SECRET_ACCESS_KEY)
+    aws_access_key_id=os.environ.get('AWS_ACCESS_KEY'),
+    aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY')
 )
 S3_RESOURCE = boto3.resource(
     's3',
-    aws_access_key_id=os.environ.get('AWS_ACCESS_KEY', credentials.AWS_ACCESS_KEY),
-    aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY', credentials.AWS_SECRET_ACCESS_KEY)
+    aws_access_key_id=os.environ.get('AWS_ACCESS_KEY'),
+    aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY')
 )
 BUCKET = S3_RESOURCE.Bucket(BUCKET_NAME)
 

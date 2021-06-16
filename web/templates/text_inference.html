@@ -16,32 +16,29 @@
 <hr />
 
 <div class="row mb-2">
-  <div class="col-8 mx-auto">
+  <div class="col-8 mx-auto text-center mt-1">
     <img
       src="{{url_for('static', filename=plot)}}"
-      class="d-block"
+      class="text-center"
       style="height: 40vh"
       alt="plot"
     />
-    <h4 class="text-center mt-2">
-      The accuracy of your model: <b>{{accuracy}}%</b>
-    </h4>
+    <h4>The accuracy of your model: <b>{{accuracy}}%</b></h4>
+    <br />
+    <a href="{{url_for('static', filename=model_path)}}" download>
+      <button type="button" class="btn btn-primary">
+        Download your trained model!
+      </button>
+    </a>
   </div>
 </div>
 
-<form class="mt-2" action="#" method="POST" enctype="multipart/form-data">
+<form class="mt-1" action="#" method="POST" enctype="multipart/form-data">
   <div
     class="row"
-    style="padding-left: 50px; padding-top: 30px; padding-right: 50px"
+    style="padding-left: 50px; padding-top: 10px; padding-right: 50px"
   >
     <div class="col-sm-6">
-      <a href="{{url_for('static', filename=model_path)}}" download>
-        <button type="button" class="btn btn-primary">
-          Download your trained model!
-        </button>
-      </a>
-      <br />
-      <br />
       <div class="my-3">
         <span class="badge badge-pill badge-info"><h7>Input Sentence</h7></span>
       </div>
@@ -50,7 +47,7 @@
         name="inputSentence"
         type="text"
         id="information"
-        rows="6"
+        rows="4"
         placeholder="Enter content here"
       >
           {{ input_Sentence }}
@@ -73,7 +70,6 @@
     </div>
     {% endif %}
   </div>
-  <br /><br />
   <div style="padding-left: 230px">
     <button
       type="submit"

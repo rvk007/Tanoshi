@@ -60,9 +60,11 @@ def train_text():
 
 @app.route('/inference', methods=['GET', 'POST'])
 def inference():
+    print("In inference")
     if request.method == 'POST':
         username = request.form['username']
         task = username_information(username)
+        print("task",task)
         if task[0]:
             if not_exists(username):
                 download_inference_files(username)
@@ -159,7 +161,7 @@ def text_inference(user_name):
             return render_template(
                 'text_inference.html', input_Sentence=input_sentence, 
                 prediction=output[1], plot=user_name+'_accuracy_change.jpg', accuracy=accuracy
-        )
+                )
         else:
             flash(f'An error has occured: {output[1]}')
             return render_template('text_inference.html')
@@ -174,6 +176,7 @@ def text_inference(user_name):
 
 @app.errorhandler(413)
 def request_entity_too_large(error):
+    print("In error log")
     flash('The file is too large. The maximum allowed size is 200 MB.')
     return redirect(url_for(f'train_{task}'))
 

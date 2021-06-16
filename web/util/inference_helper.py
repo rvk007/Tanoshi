@@ -64,7 +64,7 @@ def get_text_model(username, sentence, doesnt_exist):
         model = load_model(f'{INFERENCE}/static/{inference_data["model_path"]}', inference_data['model_parametes'])
         tokenizer_file = open(f'{INFERENCE}/static/{inference_data["tokenizer_path"]}', 'rb')
         tokenizer = pickle.load(tokenizer_file)
-        token = spacy.load('en')
+        token = spacy.load('en_core_web_sm')
         tokenized = [tok.text for tok in token.tokenizer(sentence)]
         indexed = [tokenizer[t] for t in tokenized]
         length = [len(indexed)]

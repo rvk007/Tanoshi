@@ -7,7 +7,7 @@ import zipfile
 import pandas as pd
 from random import randint
 from datetime import datetime
-from flask import render_template, flash, session
+from flask import render_template, flash, redirect, url_for
 
 from util.s3_helper import fetch_json, put_object, upload_file
 from util.inference_helper import username_information
@@ -160,7 +160,7 @@ def training(request, train_file, task):
             put_object(CONFIG_PATH, config_data)
             
             os.remove('/'.join([destination, user_filename]))
-            return render_template(f'{train_file}.html')
+            return redirect(url_for('inference'))
         else:
             upload_message = f'  Upload Unsuccessfull. An error occured: {output[1]}. Please try again.'
             flash(upload_message)
