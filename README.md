@@ -48,4 +48,3 @@ Sentiment Analysis is a type of text classification, where a text is classified 
 <div align="center">
   <img src="images/text_dataset.png" height="200px" />
 </div>
-
