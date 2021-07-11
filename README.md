@@ -8,6 +8,10 @@
 
 This is an end-to-end platform where you can upload your own custom dataset, set model parameters and train your own deep learning model without writing any line of code.
 
+<div align="center">
+  <img src="images/tanoshi.gif" />
+</div>
+
 Tanoshi currently provides Image classification and Sentiment Analysis machine learning models.
 It has a feature to create a custom model by setting model parameters such as:
 
