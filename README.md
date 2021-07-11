@@ -11,6 +11,8 @@ This is an end-to-end platform where you can upload your own custom dataset, set
 <div align="center">
   <img src="images/tanoshi.gif" />
 </div>
+<br/>
+<br/>
 
 Tanoshi currently provides Image classification and Sentiment Analysis machine learning models.
 It has a feature to create a custom model by setting model parameters such as:
