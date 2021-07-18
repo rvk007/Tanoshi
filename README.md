@@ -8,6 +8,10 @@
 
 This is an end-to-end platform where you can upload your own custom dataset, set model parameters and train your own deep learning model without writing any line of code.
 
+<style>
+  img {border-radius: 7px;}
+</style>
+
 <div align="center">
   <img src="images/tanoshi.gif" />
 </div>
